@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- LIVE-Ad -->
-    <!--<string name="admob_app_id">ca-app-pub-6855729448935366~3041944396</string>
-    <string name="admob_ad_id">ca-app-pub-6855729448935366/9192419772</string>-->
-
     <!-- Test-Ad -->
     <string name="admob_app_id">ca-app-pub-3940256099942544~3347511713</string>
     <string name="admob_ad_id">ca-app-pub-3940256099942544/6300978111</string>
