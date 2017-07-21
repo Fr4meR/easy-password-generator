@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="password_types">
+        <item>@string/password_type_internet_passwords</item>
+        <item>@string/password_type_complex_passwords</item>
+        <item>@string/password_type_wep_64</item>
+        <item>@string/password_type_wep_128</item>
+        <item>@string/password_type_wep_256</item>
+        <item>@string/password_type_wpa2</item>
+    </string-array>
+
+</resources>
