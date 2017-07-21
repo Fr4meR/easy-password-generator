@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2017 Tobias Hess
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,13 @@ package de.framersoft.easypasswordgenerator.view.ratingBar;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.GradientDrawable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.View;
+
+import de.framersoft.easypasswordgenerator.R;
 
 /**
  * A {@link View} that is used to display a rating from 1 to 3
@@ -49,20 +53,11 @@ public class RatingBarView extends View {
     private int rating = 0;
 
     /**
-     * the paint to use for filled bars
+     * stores the bounding rectangles of the bars
      * @author Tobias Hess
-     * @since 20.07.2017
+     * @since 21.07.2017
      */
-    private Paint paintFilledBar;
-
-    /**
-     * the paint to use for unfilled bars
-     * @author Tobias Hess
-     * @since 20.07.2017
-     */
-    private Paint paintUnfilledBar;
-
-    private int[][] barData;
+    private Rect[] barBoundRects;
 
     /**
      * constructor
@@ -73,24 +68,6 @@ public class RatingBarView extends View {
      */
     public RatingBarView(Context context, AttributeSet attrs){
         super(context, attrs);
-        initPainting();
-    }
-
-    /**
-     * creates the needed paints for drawing
-     * @author Tobias Hess
-     * @since 20.07.2017
-     */
-    private void initPainting(){
-        paintFilledBar = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintFilledBar.setStyle(Paint.Style.FILL);
-        paintFilledBar.setColor(getRatingColor(getRating()));
-
-        paintUnfilledBar = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paintUnfilledBar.setStyle(Paint.Style.STROKE);
-        paintUnfilledBar.setStrokeWidth(3);
-        paintUnfilledBar.setStrokeCap(Paint.Cap.SQUARE);
-        paintUnfilledBar.setColor(getRatingColor(getRating()));
     }
 
     /**
@@ -126,7 +103,6 @@ public class RatingBarView extends View {
      */
     public void setRating(int rating){
         this.rating = rating;
-        initPainting();
         invalidate();
     }
 
@@ -153,35 +129,56 @@ public class RatingBarView extends View {
         //calculate the height of a single bar
         final int barHeight = (int)(Math.ceil((h - 4 * barSpacing) / 3D));
 
-        //calculate the bar positions
-        barData = new int[3][4];
+        //calculate bounding boxes for the bars
+        barBoundRects = new Rect[3];
 
-        barData[0][0] =  padding;
-        barData[0][1] = h - barSpacing - barHeight;
-        barData[0][2] = w - padding;
-        barData[0][3] = barData[0][1] + barHeight;
+        //bottom bar
+        barBoundRects[0] = new Rect();
+        barBoundRects[0].left = padding;
+        barBoundRects[0].top = h - barSpacing - barHeight;
+        barBoundRects[0].right = w - padding;
+        barBoundRects[0].bottom = barBoundRects[0].top + barHeight;
 
-        barData[1][0] = padding;
-        barData[1][1] = barData[0][1] - barHeight - barSpacing;
-        barData[1][2] = w - padding;
-        barData[1][3] = barData[1][1] + barHeight;
+        //middle bar
+        barBoundRects[1] = new Rect();
+        barBoundRects[1].left = padding;
+        barBoundRects[1].top = barBoundRects[0].top - barSpacing - barHeight;
+        barBoundRects[1].right = w - padding;
+        barBoundRects[1].bottom = barBoundRects[1].top + barHeight;
 
-        barData[2][0] = padding;
-        barData[2][1] = barData[1][1] - barHeight - barSpacing;
-        barData[2][2] = w - padding;
-        barData[2][3] = barData[2][1] + barHeight;
+        //top bar
+        barBoundRects[2] = new Rect();
+        barBoundRects[2].left = padding;
+        barBoundRects[2].top = barBoundRects[1].top - barSpacing - barHeight;
+        barBoundRects[2].right = w - padding;
+        barBoundRects[2].bottom = barBoundRects[2].top + barHeight;
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        for(int i = 0; i < barData.length; i++){
-            if(i < rating){
-                canvas.drawRect(barData[i][0], barData[i][1], barData[i][2], barData[i][3], paintFilledBar);
+        final int barColor = getRatingColor(getRating());
+        for(int i = 0; i < barBoundRects.length; i++){
+            //get the shape that will be drawn as bar
+            GradientDrawable d = (GradientDrawable)ResourcesCompat.getDrawable(getResources(), R.drawable.rectangle, null);
+            if(i == 0){
+                d = (GradientDrawable)ResourcesCompat.getDrawable(getResources(), R.drawable.rounded_bottom_rectangle, null);
             }
-            else{
-                canvas.drawRect(barData[i][0], barData[i][1], barData[i][2], barData[i][3], paintUnfilledBar);
+            else if(i >= barBoundRects.length - 1){
+                d = (GradientDrawable)ResourcesCompat.getDrawable(getResources(), R.drawable.rounded_top_rectangle, null);
+            }
+
+            //determine the fill color
+            if (d != null) {
+                d.setColor(barColor);
+                if (i >= rating) {
+                    d.setColor(0x00000000);
+                }
+
+                d.setStroke(2, barColor);
+                d.setBounds(barBoundRects[i]);
+                d.draw(canvas);
             }
         }
     }
