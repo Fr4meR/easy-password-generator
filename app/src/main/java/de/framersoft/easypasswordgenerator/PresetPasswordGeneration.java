@@ -17,6 +17,7 @@ package de.framersoft.easypasswordgenerator;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.res.Configuration;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,12 +25,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
@@ -95,6 +98,20 @@ public class PresetPasswordGeneration extends AppCompatActivity {
      * @since 19.07.2017
      */
     private TextView textViewPasswordLength;
+
+    /**
+     * the {@link SeekBar} for the number of passwords to generate
+     * @author Tobias Hess
+     * @since 21.07.2017
+     */
+    private SeekBar seekBarNumberOfPasswords;
+
+    /**
+     * the {@link TextView} that displays the number of passwords that will be generated
+     * @author Tobias Hess
+     * @since 21.07.2017
+     */
+    private TextView textViewNumberOfPasswords;
 
     /**
      * the {@link Button} that is used to generate a new password
@@ -167,6 +184,8 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         textViewPasswordLengthTitle = (TextView) findViewById(R.id.textView_password_length_title);
         seekBarPasswordLength = (SeekBar) findViewById(R.id.seekBar_password_length);
         textViewPasswordLength = (TextView) findViewById(R.id.textView_password_length);
+        seekBarNumberOfPasswords = (SeekBar) findViewById(R.id.seekBar_number_of_passwords);
+        textViewNumberOfPasswords = (TextView) findViewById(R.id.textView_number_of_passwords);
         buttonGenerate = (Button) findViewById(R.id.button_generate_password);
         textViewPassword = (TextView) findViewById(R.id.textView_password);
         imageButtonCopyToClipboard = (ImageButton) findViewById(R.id.imageButton_copy_to_clipboard);
@@ -198,6 +217,23 @@ public class PresetPasswordGeneration extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 refreshPasswordLengthTextView();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //not used
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //not used
+            }
+        });
+
+        seekBarNumberOfPasswords.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                refreshNumberOfPasswordsTextView();
             }
 
             @Override
@@ -254,12 +290,16 @@ public class PresetPasswordGeneration extends AppCompatActivity {
             }
         });
 
-        //load ad
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adViewBottomBanner.loadAd(adRequest);
+        loadAds();
 
         //starting mode: internet passwords
         switchMode(PASSWORD_MODE_INTERNET_PASSWORDS);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        renewAdmobSmartBanner();
     }
 
     /**
@@ -276,12 +316,32 @@ public class PresetPasswordGeneration extends AppCompatActivity {
     }
 
     /**
+     * @author Tobias Hess
+     * @since 22.07.2017
+     * @return
+     *      the number of passwords to generate
+     */
+    private int getNumberOfPasswords(){
+        return seekBarNumberOfPasswords.getProgress();
+    }
+
+    /**
      * refreshes the displayed value
      * @author Tobias Hess
      * @since 19.07.2017
      */
     private void refreshPasswordLengthTextView(){
         textViewPasswordLength.setText(Integer.toString(getPasswordLength()));
+    }
+
+    /**
+     * sets the value of the seekbar for the number of passwords to generate
+     * to a textview so the user can see what he is choosing
+     * @author Tobias Hess
+     * @since 22.07.2017
+     */
+    private void refreshNumberOfPasswordsTextView(){
+        textViewNumberOfPasswords.setText(Integer.toString(getNumberOfPasswords()));
     }
 
     /**
@@ -325,6 +385,7 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         seekBarPasswordLength.setMax(MAX_PASSWORD_LENGTH - minPasswordLength);
         seekBarPasswordLength.setProgress(DEFAULT_PASSWORD_LENGTH - minPasswordLength);
         refreshPasswordLengthTextView();
+        refreshNumberOfPasswordsTextView();
 
         //clear generated passwords
         generatedPassword = null;
@@ -370,5 +431,41 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         }
 
         return generator.generatePassword();
+    }
+
+    /**
+     * replaces the smart banner at the bottom of the screen with a new
+     * smart banner and loads the ad for the banner.
+     * @author Tobias Hess
+     * @since 22.07.2017
+     *
+     */
+    private void renewAdmobSmartBanner(){
+        //create new adview
+        AdView newAdmobSmartBanner = new AdView(this);
+        newAdmobSmartBanner.setAdSize(AdSize.SMART_BANNER);
+        newAdmobSmartBanner.setAdUnitId(getString(R.string.admob_ad_id));
+        newAdmobSmartBanner.setId(R.id.adView_bottom_banner);
+        newAdmobSmartBanner.setLayoutParams(adViewBottomBanner.getLayoutParams());
+
+        //remove old adview from layout
+        LinearLayout linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayout_main);
+        linearLayoutMain.removeView(adViewBottomBanner);
+
+        //add new adView into the layout
+        linearLayoutMain.addView(newAdmobSmartBanner);
+
+        adViewBottomBanner = newAdmobSmartBanner;
+        loadAds();
+    }
+
+    /**
+     * loads the ads in the activity
+     * @author Tobias Hess
+     * @since 22.07.2017
+     */
+    private void loadAds(){
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adViewBottomBanner.loadAd(adRequest);
     }
 }
