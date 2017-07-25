@@ -170,7 +170,8 @@ public class PresetPasswordGeneration extends AppCompatActivity {
 
         //create the ListView with the Configurations as header
         ListView listViewGeneratedPasswords = (ListView) findViewById(R.id.listView_generated_passwords);
-        View presetPasswordConfiguration = getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration, listViewGeneratedPasswords);
+        View presetPasswordConfiguration = getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration,
+                listViewGeneratedPasswords, false);
         listViewGeneratedPasswords.addHeaderView(presetPasswordConfiguration);
         listViewGeneratedPasswords.setAdapter(generatedPasswordsAdapter);
 
