@@ -70,6 +70,13 @@ public class PresetPasswordGeneration extends AppCompatActivity {
     private static final int DEFAULT_PASSWORD_LENGTH = 10;
 
     /**
+     * the default number of passwords to be generated
+     * @author Tobias Hess
+     * @since 25.07.2017
+     */
+    private static final int DEFAULT_NUMBER_OF_PASSWORDS = 5;
+
+    /**
      * the {@link Spinner} that is used to select the passwords type
      * from
      * @author Tobias Hess
@@ -322,7 +329,7 @@ public class PresetPasswordGeneration extends AppCompatActivity {
      *      the number of passwords to generate
      */
     private int getNumberOfPasswords(){
-        return seekBarNumberOfPasswords.getProgress();
+        return seekBarNumberOfPasswords.getProgress() + 1;
     }
 
     /**
@@ -385,6 +392,7 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         seekBarPasswordLength.setMax(MAX_PASSWORD_LENGTH - minPasswordLength);
         seekBarPasswordLength.setProgress(DEFAULT_PASSWORD_LENGTH - minPasswordLength);
         refreshPasswordLengthTextView();
+        seekBarNumberOfPasswords.setProgress(DEFAULT_NUMBER_OF_PASSWORDS - 1);
         refreshNumberOfPasswordsTextView();
 
         //clear generated passwords
