@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator;
+package de.framersoft.easypasswordgenerator.activities;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,21 +22,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.framersoft.common.password.generator.PasswordGenerator;
-import de.framersoft.common.password.strength.PasswordStrength;
-import de.framersoft.easypasswordgenerator.view.ratingBar.RatingBarView;
+import de.framersoft.easypasswordgenerator.R;
+import de.framersoft.easypasswordgenerator.adapters.GeneratedPasswordsAdapter;
 
 public class PresetPasswordGeneration extends AppCompatActivity {
 
@@ -128,28 +128,6 @@ public class PresetPasswordGeneration extends AppCompatActivity {
     private Button buttonGenerate;
 
     /**
-     * the {@link TextView} that is used to display the generated password
-     * @author Tobias Hess
-     * @since 20.07.2017
-     */
-    private TextView textViewPassword;
-
-    /**
-     * the {@link RatingBarView} used to display the password strength rating
-     * of the generated password
-     * @author Tobias Hess
-     * @since 21.07.2017
-     */
-    private RatingBarView ratingBarViewPasswordRating;
-
-    /**
-     * the {@link ImageButton} that is used to copy the password to the clipboard
-     * @author Tobias Hess
-     * @since 20.07.2017
-     */
-    private ImageButton imageButtonCopyToClipboard;
-
-    /**
      * the banner at the bottom
      * @author Tobias Hess
      * @since 20.07.2017
@@ -172,11 +150,12 @@ public class PresetPasswordGeneration extends AppCompatActivity {
     private int currentMode;
 
     /**
-     * the current generated password
+     * the adapter that is used to populate the data of the generated passwords
+     * to the list view in the activity
      * @author Tobias Hess
-     * @since 20.07.2017
+     * @since 25.07.2017
      */
-    private String generatedPassword;
+    private GeneratedPasswordsAdapter generatedPasswordsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,18 +165,24 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         //initialize admob sdk
         MobileAds.initialize(this, getString(R.string.admob_app_id));
 
+        //initialize the adapter for the password listview
+        generatedPasswordsAdapter = new GeneratedPasswordsAdapter(this, new ArrayList<>());
+
+        //create the ListView with the Configurations as header
+        ListView listViewGeneratedPasswords = (ListView) findViewById(R.id.listView_generated_passwords);
+        View presetPasswordConfiguration = getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration, listViewGeneratedPasswords);
+        listViewGeneratedPasswords.addHeaderView(presetPasswordConfiguration);
+        listViewGeneratedPasswords.setAdapter(generatedPasswordsAdapter);
+
         //get dynamic elements of the activity
-        spinnerPasswordType = (Spinner) findViewById(R.id.spinner_password_type);
-        textViewPasswordLengthTitle = (TextView) findViewById(R.id.textView_password_length_title);
-        seekBarPasswordLength = (SeekBar) findViewById(R.id.seekBar_password_length);
-        textViewPasswordLength = (TextView) findViewById(R.id.textView_password_length);
-        seekBarNumberOfPasswords = (SeekBar) findViewById(R.id.seekBar_number_of_passwords);
-        textViewNumberOfPasswords = (TextView) findViewById(R.id.textView_number_of_passwords);
-        buttonGenerate = (Button) findViewById(R.id.button_generate_password);
-        textViewPassword = (TextView) findViewById(R.id.textView_password);
-        imageButtonCopyToClipboard = (ImageButton) findViewById(R.id.imageButton_copy_to_clipboard);
+        spinnerPasswordType = (Spinner) presetPasswordConfiguration.findViewById(R.id.spinner_password_type);
+        textViewPasswordLengthTitle = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_password_length_title);
+        seekBarPasswordLength = (SeekBar) presetPasswordConfiguration.findViewById(R.id.seekBar_password_length);
+        textViewPasswordLength = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_password_length);
+        seekBarNumberOfPasswords = (SeekBar) presetPasswordConfiguration.findViewById(R.id.seekBar_number_of_passwords);
+        textViewNumberOfPasswords = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_number_of_passwords);
+        buttonGenerate = (Button) presetPasswordConfiguration.findViewById(R.id.button_generate_password);
         adViewBottomBanner = (AdView) findViewById(R.id.adView_bottom_banner);
-        ratingBarViewPasswordRating = (RatingBarView) findViewById(R.id.ratingBarView_password_rating);
 
         //set ActionBar title
         final ActionBar actionBar = getSupportActionBar();
@@ -258,42 +243,7 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         buttonGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generatedPassword = generatePassword();
-                textViewPassword.setText(generatedPassword);
-
-                int rating = PasswordStrength.calculatePasswordStrengthRating(generatedPassword);
-                if(rating <= 2){
-                    ratingBarViewPasswordRating.setRating(1);
-                }
-                else if(rating == 3){
-                    ratingBarViewPasswordRating.setRating(2);
-                }
-                else{
-                    ratingBarViewPasswordRating.setRating(3);
-                }
-            }
-        });
-
-        //set the listeners for the copy to clipboard button
-        imageButtonCopyToClipboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(generatedPassword != null && !generatedPassword.isEmpty()) {
-                    //put password in clipboard
-                    ClipData cd = ClipData.newPlainText(getString(R.string.clip_data_label_password), generatedPassword);
-                    ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                    cm.setPrimaryClip(cd);
-
-                    //inform user
-                    Toast.makeText(getApplicationContext(),
-                            getString(R.string.activity_preset_password_generation_password_copied_to_clipboard),
-                            Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),
-                            getString(R.string.activity_preset_password_generation_password_needed),
-                            Toast.LENGTH_SHORT).show();
-                }
+                generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords());
             }
         });
 
@@ -395,26 +345,21 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         seekBarNumberOfPasswords.setProgress(DEFAULT_NUMBER_OF_PASSWORDS - 1);
         refreshNumberOfPasswordsTextView();
 
-        //clear generated passwords
-        generatedPassword = null;
-        textViewPassword.setText("");
-
         //set currentmode to new one
         currentMode = mode;
     }
 
     /**
-     * generates a password with the set password mode and the set length of the password
+     * generates the set number of passwords with the set password mode and the set length of the password
      * @author Tobias Hess
      * @since 20.07.2017
      * @throws UnsupportedOperationException
      *      gets thrown if there is no password generator existing for the current password mode
      * @return
-     *      the generated password
+     *      the generated passwords as a List
      */
-    private String generatePassword(){
+    private List<String> generatePasswords(){
         PasswordGenerator generator;
-
         switch (currentMode){
             case PASSWORD_MODE_INTERNET_PASSWORDS:
                 generator = PasswordGenerator.getInternetPasswordGenerator(getPasswordLength());
@@ -438,7 +383,12 @@ public class PresetPasswordGeneration extends AppCompatActivity {
                 throw new UnsupportedOperationException("unknown password generator mode");
         }
 
-        return generator.generatePassword();
+        ArrayList<String> generatedPasswords = new ArrayList<>(getNumberOfPasswords());
+        for(int i = 0; i < getNumberOfPasswords(); i++){
+            generatedPasswords.add(generator.generatePassword());
+        }
+
+        return generatedPasswords;
     }
 
     /**

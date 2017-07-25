@@ -18,5 +18,6 @@
 
     <string name="content_description_copy_to_clipboard">In die Zwischenablage kopieren</string>
     <string name="clip_data_label_password">Passwort aus Easy Password Manager</string>
+    <string name="activity_preset_password_generation_number_of_passwords">Anzahl der Passwörter</string>
 
 </resources>
