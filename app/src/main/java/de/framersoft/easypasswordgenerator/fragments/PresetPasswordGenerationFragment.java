@@ -13,29 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.activities;
+package de.framersoft.easypasswordgenerator.fragments;
 
-import android.content.res.Configuration;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +35,15 @@ import de.framersoft.common.password.generator.PasswordGenerator;
 import de.framersoft.easypasswordgenerator.R;
 import de.framersoft.easypasswordgenerator.adapters.GeneratedPasswordsAdapter;
 
-public class PresetPasswordGeneration extends AppCompatActivity {
+/**
+ * This {@link Fragment} is used for preset password generation.
+ * The user can select from a list of password templates to generate
+ * his passwords, that will be displayed in a list under the settings
+ * for the password generation.
+ * @author Tobias Hess
+ * @since 27.07.2017
+ */
+public class PresetPasswordGenerationFragment extends Fragment {
 
     /*
      * constants for the different password modes. the number of the mode
@@ -79,21 +78,6 @@ public class PresetPasswordGeneration extends AppCompatActivity {
      * @since 25.07.2017
      */
     private static final int DEFAULT_NUMBER_OF_PASSWORDS = 5;
-
-    /**
-     * the drawer layout of this activity
-     * @author Tobias Hess
-     * @since 27.07.2017
-     */
-    private DrawerLayout drawerLayout;
-
-    /**
-     * the drawer toggle object, that keeps the action bar and the
-     * navigation synced.
-     * @author Tobias Hess
-     * @since 27.07.2017
-     */
-    private ActionBarDrawerToggle drawerToggle;
 
     /**
      * the {@link Spinner} that is used to select the passwords type
@@ -147,13 +131,6 @@ public class PresetPasswordGeneration extends AppCompatActivity {
     private Button buttonGenerate;
 
     /**
-     * the banner at the bottom
-     * @author Tobias Hess
-     * @since 20.07.2017
-     */
-    private AdView adViewBottomBanner;
-
-    /**
      * determines the minimal password length that has to be
      * used to generate
      * @author Tobias Hess
@@ -176,46 +153,40 @@ public class PresetPasswordGeneration extends AppCompatActivity {
      */
     private GeneratedPasswordsAdapter generatedPasswordsAdapter;
 
+    /**
+     * empty constructor (required)
+     */
+    public PresetPasswordGenerationFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_preset_password_generation);
-
-        //initialize admob sdk
-        MobileAds.initialize(this, getString(R.string.admob_app_id));
-
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        //initialize the drawerLayout and drawerToggle object
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout_main);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navi_drawer_open, R.string.navi_drawer_close){
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                this.syncState();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                this.syncState();
-            }
-        };
-        drawerLayout.addDrawerListener(drawerToggle);
 
         //initialize the adapter for the password listview
-        generatedPasswordsAdapter = new GeneratedPasswordsAdapter(this, new ArrayList<>());
+        generatedPasswordsAdapter = new GeneratedPasswordsAdapter(getActivity(), new ArrayList<>());
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_preset_password_generation, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         //create the ListView with the Configurations as header
-        ListView listViewGeneratedPasswords = (ListView) findViewById(R.id.listView_generated_passwords);
-        View presetPasswordConfiguration = getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration,
+        ListView listViewGeneratedPasswords = (ListView) view.findViewById(R.id.listView_generated_passwords);
+        View presetPasswordConfiguration = getActivity().getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration,
                 listViewGeneratedPasswords, false);
         listViewGeneratedPasswords.addHeaderView(presetPasswordConfiguration);
         listViewGeneratedPasswords.setAdapter(generatedPasswordsAdapter);
 
-        //get dynamic elements of the activity
+        //get dynamic elements of the inflated configuration view
         spinnerPasswordType = (Spinner) presetPasswordConfiguration.findViewById(R.id.spinner_password_type);
         textViewPasswordLengthTitle = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_password_length_title);
         seekBarPasswordLength = (SeekBar) presetPasswordConfiguration.findViewById(R.id.seekBar_password_length);
@@ -223,13 +194,6 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         seekBarNumberOfPasswords = (SeekBar) presetPasswordConfiguration.findViewById(R.id.seekBar_number_of_passwords);
         textViewNumberOfPasswords = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_number_of_passwords);
         buttonGenerate = (Button) presetPasswordConfiguration.findViewById(R.id.button_generate_password);
-        adViewBottomBanner = (AdView) findViewById(R.id.adView_bottom_banner);
-
-        //set ActionBar title
-        final ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setTitle(getString(R.string.activity_preset_password_generation_title));
-        }
 
         //set the spinner listeners so a selection in the spinner will change the mode
         spinnerPasswordType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -288,34 +252,8 @@ public class PresetPasswordGeneration extends AppCompatActivity {
             }
         });
 
-        loadAds();
-
         //starting mode: internet passwords
         switchMode(PASSWORD_MODE_INTERNET_PASSWORDS);
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        //syncs the state of the navigation drawer with the toggle object
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        renewAdmobSmartBanner();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //delegate the event of the Hamburger icon to
-        //drawer toggle
-        if(drawerToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -448,41 +386,5 @@ public class PresetPasswordGeneration extends AppCompatActivity {
         }
 
         return generatedPasswords;
-    }
-
-    /**
-     * replaces the smart banner at the bottom of the screen with a new
-     * smart banner and loads the ad for the banner.
-     * @author Tobias Hess
-     * @since 22.07.2017
-     *
-     */
-    private void renewAdmobSmartBanner(){
-        //create new adview
-        AdView newAdmobSmartBanner = new AdView(this);
-        newAdmobSmartBanner.setAdSize(AdSize.SMART_BANNER);
-        newAdmobSmartBanner.setAdUnitId(getString(R.string.admob_ad_id));
-        newAdmobSmartBanner.setId(R.id.adView_bottom_banner);
-        newAdmobSmartBanner.setLayoutParams(adViewBottomBanner.getLayoutParams());
-
-        //remove old adview from layout
-        LinearLayout linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayout_main);
-        linearLayoutMain.removeView(adViewBottomBanner);
-
-        //add new adView into the layout
-        linearLayoutMain.addView(newAdmobSmartBanner);
-
-        adViewBottomBanner = newAdmobSmartBanner;
-        loadAds();
-    }
-
-    /**
-     * loads the ads in the activity
-     * @author Tobias Hess
-     * @since 22.07.2017
-     */
-    private void loadAds(){
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adViewBottomBanner.loadAd(adRequest);
     }
 }

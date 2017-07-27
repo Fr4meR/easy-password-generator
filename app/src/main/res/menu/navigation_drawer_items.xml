@@ -4,6 +4,7 @@
         <item
             android:id="@+id/nav_preset_password_generation"
             android:icon="@drawable/ic_nav_item_preset_passwords"
-            android:title="@string/nav_item_title_preset_password_generation" />
+            android:title="@string/nav_item_title_preset_password_generation"
+            android:checked="true"/>
     </group>
 </menu>

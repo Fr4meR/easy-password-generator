@@ -22,5 +22,9 @@
     <string name="nav_item_title_preset_password_generation">Template Passwords</string>
     <string name="nav_item_help">Help</string>
     <string name="nav_item_about_us">About us</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment_about_us">Hello blank fragment About us</string>
+    <string name="hello_blank_fragment_help">Hello blank fragment Help</string>
 </resources>
 
