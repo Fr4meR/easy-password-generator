@@ -15,5 +15,12 @@
     <string name="password_type_wep_256">WEP-Key (256 bit)</string>
     <string name="password_type_wep_64">WEP-Key (64 bit)</string>
     <string name="password_type_wpa2">WPA2-Key</string>
+
+    <string name="navi_drawer_open">Open Navigation Drawer</string>
+    <string name="navi_drawer_close">Close Navigation Drawer</string>
+
+    <string name="nav_item_title_preset_password_generation">Template Passwords</string>
+    <string name="nav_item_help">Help</string>
+    <string name="nav_item_about_us">About us</string>
 </resources>
 

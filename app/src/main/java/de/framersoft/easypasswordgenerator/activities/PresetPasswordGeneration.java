@@ -16,9 +16,13 @@
 package de.framersoft.easypasswordgenerator.activities;
 
 import android.content.res.Configuration;
+import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -75,6 +79,21 @@ public class PresetPasswordGeneration extends AppCompatActivity {
      * @since 25.07.2017
      */
     private static final int DEFAULT_NUMBER_OF_PASSWORDS = 5;
+
+    /**
+     * the drawer layout of this activity
+     * @author Tobias Hess
+     * @since 27.07.2017
+     */
+    private DrawerLayout drawerLayout;
+
+    /**
+     * the drawer toggle object, that keeps the action bar and the
+     * navigation synced.
+     * @author Tobias Hess
+     * @since 27.07.2017
+     */
+    private ActionBarDrawerToggle drawerToggle;
 
     /**
      * the {@link Spinner} that is used to select the passwords type
@@ -164,6 +183,27 @@ public class PresetPasswordGeneration extends AppCompatActivity {
 
         //initialize admob sdk
         MobileAds.initialize(this, getString(R.string.admob_app_id));
+
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        //initialize the drawerLayout and drawerToggle object
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout_main);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navi_drawer_open, R.string.navi_drawer_close){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                this.syncState();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                this.syncState();
+            }
+        };
+        drawerLayout.addDrawerListener(drawerToggle);
 
         //initialize the adapter for the password listview
         generatedPasswordsAdapter = new GeneratedPasswordsAdapter(this, new ArrayList<>());
@@ -255,9 +295,27 @@ public class PresetPasswordGeneration extends AppCompatActivity {
     }
 
     @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        //syncs the state of the navigation drawer with the toggle object
+        drawerToggle.syncState();
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         renewAdmobSmartBanner();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //delegate the event of the Hamburger icon to
+        //drawer toggle
+        if(drawerToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**

@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single"
+        android:id="@+id/nav_group_main">
+        <item
+            android:id="@+id/nav_preset_password_generation"
+            android:icon="@drawable/ic_nav_item_preset_passwords"
+            android:title="@string/nav_item_title_preset_password_generation" />
+    </group>
+</menu>
