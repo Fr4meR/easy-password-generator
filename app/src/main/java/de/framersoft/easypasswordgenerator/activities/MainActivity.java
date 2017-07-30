@@ -31,16 +31,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
 import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.fragments.AboutUsFragment;
+import de.framersoft.easypasswordgenerator.fragments.InfoFragment;
 import de.framersoft.easypasswordgenerator.fragments.HelpFragment;
 import de.framersoft.easypasswordgenerator.fragments.PresetPasswordGenerationFragment;
 
+/**
+ * the main activity of the app. has an navigation drawer that will switch
+ * the active fragment.
+ * @author Tobias Hess
+ * @since 30.07.2017
+ */
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -136,6 +143,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         adViewBottomBanner = (AdView) findViewById(R.id.adView_bottom_banner);
+        adViewBottomBanner.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                adViewBottomBanner.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                adViewBottomBanner.setVisibility(View.GONE);
+            }
+        });
 
         //set ActionBar title
         final ActionBar actionBar = getSupportActionBar();
@@ -192,6 +212,19 @@ public class MainActivity extends AppCompatActivity {
         linearLayoutMain.addView(newAdmobSmartBanner);
 
         adViewBottomBanner = newAdmobSmartBanner;
+        adViewBottomBanner.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                adViewBottomBanner.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                adViewBottomBanner.setVisibility(View.GONE);
+            }
+        });
         loadAds();
     }
 
@@ -202,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void loadAds(){
         AdRequest adRequest = new AdRequest.Builder().build();
+        adViewBottomBanner.setVisibility(View.GONE);
         adViewBottomBanner.loadAd(adRequest);
     }
 
@@ -285,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
      *      add this transaction to the back stack?
      */
     private void openAboutUs(boolean useBackStack){
-        Fragment f = new AboutUsFragment();
+        Fragment f = new InfoFragment();
         startFragment(f, useBackStack);
         selectNavigationDrawerItem(R.id.nav_about_us);
     }

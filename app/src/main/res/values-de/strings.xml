@@ -7,7 +7,6 @@
     <string name="activity_preset_password_generation_password_length">Länge des Passworts</string>
     <string name="activity_preset_password_generation_password_generate">Generieren</string>
     <string name="activity_preset_password_generation_password_copied_to_clipboard">In die Zwischenablage kopiert.</string>
-    <string name="activity_preset_password_generation_password_needed">Bitte zuerst Passwort generieren.</string>
 
     <string name="password_type_internet_passwords">Internet Passwort</string>
     <string name="password_type_complex_passwords">Komplexes Passwort</string>
@@ -19,10 +18,16 @@
     <string name="content_description_copy_to_clipboard">In die Zwischenablage kopieren</string>
     <string name="clip_data_label_password">Passwort aus Easy Password Manager</string>
     <string name="activity_preset_password_generation_number_of_passwords">Anzahl der Passwörter</string>
-    <string name="nav_item_about_us">Über uns</string>
+    <string name="nav_item_about_us">Info</string>
     <string name="nav_item_title_preset_password_generation">Vorlagen-Passwörter</string>
     <string name="nav_item_help">Hilfe</string>
     <string name="navi_drawer_close">Navgation schließen</string>
     <string name="navi_drawer_open">Navigation öffnen</string>
+    <string name="info_text_author">Autor</string>
+    <string name="info_text_email">Kontat E-Mail</string>
+    <string name="info_text_source_code">Quellcode</string>
+    <string name="info_text_version_code">Build Nummer</string>
+    <string name="info_text_version_common">Common Version</string>
+    <string name="info_text_version_name">Version</string>
 
 </resources>

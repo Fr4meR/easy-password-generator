@@ -33,7 +33,7 @@ import java.util.List;
 
 import de.framersoft.common.password.generator.PasswordGenerator;
 import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.adapters.GeneratedPasswordsAdapter;
+import de.framersoft.easypasswordgenerator.adapters.generatedPasswords.GeneratedPasswordsAdapter;
 
 /**
  * This {@link Fragment} is used for preset password generation.

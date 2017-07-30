@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.adapters;
+package de.framersoft.easypasswordgenerator.adapters.generatedPasswords;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -51,14 +51,14 @@ public class GeneratedPasswordsAdapter extends BaseAdapter {
      * @author Tobias Hess
      * @since 25.07.2017
      */
-    private Context context;
+    private final Context context;
 
     /**
      * the layout inflater used to create the views
      * @author Tobias Hess
      * @since 25.07.2017
      */
-    private LayoutInflater layoutInflater;
+    private final LayoutInflater layoutInflater;
 
     /**
      * a list containing the passwords to populate the list with

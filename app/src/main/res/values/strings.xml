@@ -3,7 +3,6 @@
     <string name="activity_preset_password_generation_password_copied_to_clipboard">Copied to clipboard.</string>
     <string name="activity_preset_password_generation_password_generate">Generate</string>
     <string name="activity_preset_password_generation_password_length">Password length</string>
-    <string name="activity_preset_password_generation_password_needed">Please generate password first.</string>
     <string name="activity_preset_password_generation_password_type">Password type</string>
     <string name="activity_preset_password_generation_number_of_passwords">Number of passwords</string>
     <string name="activity_preset_password_generation_title">Generate password</string>
@@ -21,10 +20,20 @@
 
     <string name="nav_item_title_preset_password_generation">Template Passwords</string>
     <string name="nav_item_help">Help</string>
-    <string name="nav_item_about_us">About us</string>
+    <string name="nav_item_about_us">Info</string>
+
+    <string name="info_text_author">Author</string>
+    <string name="info_subtext_author" translatable="false">Tobias Hess</string>
+    <string name="info_text_email">Contact E-Mail</string>
+    <string name="info_subtext_email" translatable="false">framersoft@gmail.com</string>
+    <string name="info_text_source_code">Source Code</string>
+    <string name="info_subtext_source_code" translatable="false">https://github.com/Fr4meR/easy-password-generator</string>
+    <string name="info_text_version_name">Version</string>
+    <string name="info_text_version_code">Build Number</string>
+    <string name="info_text_version_common">Common Version</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment_about_us">Hello blank fragment About us</string>
-    <string name="hello_blank_fragment_help">Hello blank fragment Help</string>
+    <string name="hello_blank_fragment_help" translatable="false">Hello blank fragment Help</string>
 </resources>
 
