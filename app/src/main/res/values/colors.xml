@@ -9,4 +9,6 @@
     <color name="colorSecondaryDark">#4b636e</color>
 
     <color name="colorAccent">@color/colorSecondary</color>
+
+    <color name="colorNavText">#333333</color>
 </resources>

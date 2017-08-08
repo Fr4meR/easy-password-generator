@@ -18,6 +18,8 @@ package de.framersoft.easypasswordgenerator.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,13 +126,6 @@ public class PresetPasswordGenerationFragment extends Fragment {
     private TextView textViewNumberOfPasswords;
 
     /**
-     * the {@link Button} that is used to generate a new password
-     * @author Tobias Hess
-     * @since 20.07.2017
-     */
-    private Button buttonGenerate;
-
-    /**
      * determines the minimal password length that has to be
      * used to generate
      * @author Tobias Hess
@@ -158,6 +153,16 @@ public class PresetPasswordGenerationFragment extends Fragment {
      */
     public PresetPasswordGenerationFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle(getString(R.string.activity_preset_password_generation_title));
+        }
     }
 
     @Override
@@ -193,7 +198,7 @@ public class PresetPasswordGenerationFragment extends Fragment {
         textViewPasswordLength = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_password_length);
         seekBarNumberOfPasswords = (SeekBar) presetPasswordConfiguration.findViewById(R.id.seekBar_number_of_passwords);
         textViewNumberOfPasswords = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_number_of_passwords);
-        buttonGenerate = (Button) presetPasswordConfiguration.findViewById(R.id.button_generate_password);
+        Button buttonGenerate = (Button) presetPasswordConfiguration.findViewById(R.id.button_generate_password);
 
         //set the spinner listeners so a selection in the spinner will change the mode
         spinnerPasswordType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -245,12 +250,7 @@ public class PresetPasswordGenerationFragment extends Fragment {
         });
 
         //set the button listeners
-        buttonGenerate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords());
-            }
-        });
+        buttonGenerate.setOnClickListener(v -> generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords()));
 
         //starting mode: internet passwords
         switchMode(PASSWORD_MODE_INTERNET_PASSWORDS);

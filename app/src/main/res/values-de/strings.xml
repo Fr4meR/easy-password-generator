@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Easy Password Generator</string>
 
-    <string name="activity_preset_password_generation_title">Passwort generieren</string>
+    <string name="activity_preset_password_generation_title">Vorlagen-Passwort</string>
     <string name="activity_preset_password_generation_password_type">Art des Passworts</string>
     <string name="activity_preset_password_generation_password_length">Länge des Passworts</string>
     <string name="activity_preset_password_generation_password_generate">Generieren</string>
@@ -29,5 +29,87 @@
     <string name="info_text_version_code">Build Nummer</string>
     <string name="info_text_version_common">Common Version</string>
     <string name="info_text_version_name">Version</string>
+    <string name="fragment_title_help">Hilfe</string>
+    <string name="fragment_title_info">Info</string>
+
+    <string name="help_content_missing">Kein Inhalt vorhanden.</string>
+    <string name="help_content_menu_items_template_passwords">
+        <![CDATA[
+        <p>Hier können Passwörter mithilfe von Vorlagen erstellt werden.</p>
+        <p>Beschreibung der Funktionen:</p>
+
+        <p>
+            <b>Art des Passworts</b><br />
+            Hierüber wählt man die gewünschte Vorlage aus. Über die einzelnen Vorlagen
+            können Sie mehr in der Hilfesektion <i>Passwortvorlagen</i> erfahren.
+        </p>
+        <p>
+            <b>Länge des Passworts</b><br />
+            Mit diesem Slider können Sie die gewünschte Passwortlänge einstellen. Dieser Slider
+            ist nur für Vorlagen, die eine variable Länge erlauben vorhanden.
+        </p>
+        <p>
+            <b>Anzahl der Passwörter</b><br />
+            Mit diesem Slider können Sie die Anzahl der zu erstellenden Passwörter einstellen.
+        </p>
+        <p>
+            <b>Generieren</b><br />
+            Über diesen Button generieren Sie die Passwörter mit den vorgenommenen Einstellungen.
+        </p>
+
+        <p>
+            Wenn die Passwörter generiert sind, sehen Sie die generierten Passwörter in einer Liste.
+            Für jedes Passwort wird zusätzlich ein Rating für dessen Stärke angezeigt. Ein grünes Rating
+            bedeutet <b>stark</b>, ein gelbes <b>mittel</b> und ein rotes <b>schwach</b>. Zusätzlich
+            kann ein Passwort über den jeweiligen Button in die Zwischenablage kopiert werden.
+        </p>
+        ]]>
+    </string>
+    <string name="help_content_templates_complex_passwords">
+        <![CDATA[
+            <p>Mit dieser Vorlage können komplexe Passwörter erzeugt werden.</p>
+            <p>
+                Für diese Vorlage kann die gewünschte Passwortlänge eingestellt werden. Das
+                erzeugt Passwort besteht aus Groß- und Kleinbuchstaben, Ziffern und Sonderzeichen.
+            </p>
+        ]]>
+    </string>
+    <string name="help_content_templates_internet_passwords">
+        <![CDATA[
+            <p>Mit dieser Vorlage können einfach merkbare Passwörter erstellt werden.</p>
+            <p>
+                Für diese Vorlage kann die gewünschte Passwortlänge eingestellt werden. Das
+                erzeugte Passwort besteht aus einem Großbuchstaben gefolgt von Kleinbuchstaben
+                und drei Zahlen am Ende. Des Weiteren ist das Passwort sprechend - dies bedeutet,
+                dass das Passwort abwechselnd aus einem Vokal und einem Konsonanten besteht.
+            </p>
+        ]]>
+    </string>
+    <string name="help_content_templates_wep_keys">
+        <![CDATA[
+            <p>Mit dieser Vorlage können WEP-Schlüssel erzeugt werden.</p>
+            <p>
+                Für diese Art von Passwörtern ist die Länge fest. Die erzeugten Passwörter
+                können für die WEP-Verschlüsselung verwendet werden.
+            </p>
+        ]]>
+    </string>
+    <string name="help_content_templates_wpa2_keys">
+        <![CDATA[
+            <p>Mit dieser Vorlage können WPA2-Schlüssel erzeugt werden.</p>
+            <p>
+                Für diese Art von Passwörtern ist die Länge fest. Die erzeugten Passwörter
+                können für die WPA2-Verschlüsselung verwendet werden.
+            </p>
+        ]]>
+    </string>
+    <string name="help_header_menu_items">Menüpunkte</string>
+    <string name="help_header_missing">Keine Überschrift vorhanden</string>
+    <string name="help_header_templates">Passwortvorlagen</string>
+    <string name="help_menu_items_template_passwords">Vorlagen-Passwort</string>
+    <string name="help_templates_complex_passwords">Komplexes Password</string>
+    <string name="help_templates_internet_passwords">Internet Passwort</string>
+    <string name="help_templates_wep_keys">WEP-Schlüssel</string>
+    <string name="help_templates_wpa2_keys">WPA2-Schlüssel</string>
 
 </resources>

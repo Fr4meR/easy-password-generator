@@ -34,12 +34,6 @@ import de.framersoft.easypasswordgenerator.R;
 
 public class TextSubtextAdapter extends BaseAdapter {
 
-    /**
-     * the context this adapter is used in
-     * @author Tobias Hess
-     * @since 30.07.2017
-     */
-    private final Context context;
 
     /**
      * the layout inflater used by the adapter to
@@ -57,8 +51,7 @@ public class TextSubtextAdapter extends BaseAdapter {
     private final List<TextSubtext> contents;
 
     public TextSubtextAdapter(Context context, List<TextSubtext> contents){
-        this.context = context;
-        this.layoutInflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.contents = contents;
     }
 

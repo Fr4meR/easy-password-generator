@@ -21,6 +21,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,21 +47,24 @@ import de.framersoft.easypasswordgenerator.adapters.textSubtext.TextSubtextAdapt
  */
 public class InfoFragment extends Fragment {
 
-    /**
-     * the {@link ListView} that is displaying the
-     * info-data
-     * @author Tobias Hess
-     * @since 30.07.2017
-     */
-    private ListView listViewInfo;
-
     public InfoFragment() {
         // Required empty public constructor
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle(getString(R.string.fragment_title_info));
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_info, container, false);
     }
@@ -78,7 +83,7 @@ public class InfoFragment extends Fragment {
             );
             versionName = packageInfo.versionName;
             final String versionCode = Integer.toString(packageInfo.versionCode);
-            final String versionDate = new SimpleDateFormat("yyyy-mm-dd").format(new Date(packageInfo.lastUpdateTime));
+            final String versionDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(packageInfo.lastUpdateTime));
 
             buildNumber = versionCode + " (" + versionDate + ")";
         } catch (PackageManager.NameNotFoundException e) {
@@ -102,7 +107,7 @@ public class InfoFragment extends Fragment {
 
         TextSubtextAdapter adapter = new TextSubtextAdapter(getActivity(), contents);
 
-        listViewInfo = (ListView) view.findViewById(R.id.listView_info);
+        ListView listViewInfo = (ListView) view.findViewById(R.id.listView_info);
         listViewInfo.setAdapter(adapter);
     }
 }

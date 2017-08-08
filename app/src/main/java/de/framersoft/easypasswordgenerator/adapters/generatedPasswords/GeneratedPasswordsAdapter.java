@@ -133,19 +133,16 @@ public class GeneratedPasswordsAdapter extends BaseAdapter {
 
         //copy to clipboard
         ImageButton imageButtonCopyToClipboard = (ImageButton) view.findViewById(R.id.imageButton_copy_to_clipboard);
-        imageButtonCopyToClipboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //put password in clipboard
-                ClipData cd = ClipData.newPlainText(context.getString(R.string.clip_data_label_password), password);
-                ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                cm.setPrimaryClip(cd);
+        imageButtonCopyToClipboard.setOnClickListener(v -> {
+            //put password in clipboard
+            ClipData cd = ClipData.newPlainText(context.getString(R.string.clip_data_label_password), password);
+            ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            cm.setPrimaryClip(cd);
 
-                //inform user
-                Toast.makeText(context,
-                        context.getString(R.string.activity_preset_password_generation_password_copied_to_clipboard),
-                        Toast.LENGTH_SHORT).show();
-            }
+            //inform user
+            Toast.makeText(context,
+                    context.getString(R.string.activity_preset_password_generation_password_copied_to_clipboard),
+                    Toast.LENGTH_SHORT).show();
         });
 
         return view;

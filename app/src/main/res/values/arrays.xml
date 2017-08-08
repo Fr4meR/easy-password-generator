@@ -9,5 +9,4 @@
         <item>@string/password_type_wep_256</item>
         <item>@string/password_type_wpa2</item>
     </string-array>
-
 </resources>

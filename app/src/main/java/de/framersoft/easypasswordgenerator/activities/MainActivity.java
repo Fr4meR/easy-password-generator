@@ -16,14 +16,13 @@
 package de.framersoft.easypasswordgenerator.activities;
 
 import android.content.res.Configuration;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,8 +37,10 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
 import de.framersoft.easypasswordgenerator.R;
+import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
 import de.framersoft.easypasswordgenerator.fragments.InfoFragment;
-import de.framersoft.easypasswordgenerator.fragments.HelpFragment;
+import de.framersoft.easypasswordgenerator.fragments.help.HelpEntryFragment;
+import de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment;
 import de.framersoft.easypasswordgenerator.fragments.PresetPasswordGenerationFragment;
 
 /**
@@ -48,7 +49,15 @@ import de.framersoft.easypasswordgenerator.fragments.PresetPasswordGenerationFra
  * @author Tobias Hess
  * @since 30.07.2017
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements HelpListFragment.OnHelpEntrySelectedListener{
+
+    /**
+     * the drawer layout for the navigation
+     * @author Tobias Hess
+     * @since 08.08.2017
+     */
+    private DrawerLayout drawerLayout;
 
     /**
      * the drawer toggle object, that keeps the action bar and the
@@ -92,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //initialize the drawerLayout and drawerToggle object
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout_main);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout_main);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navi_drawer_open, R.string.navi_drawer_close){
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -110,35 +119,29 @@ public class MainActivity extends AppCompatActivity {
 
         //set listeners to the main navigation view
         navigationViewMain = (NavigationView) findViewById(R.id.navigationView_drawer_navigation);
-        navigationViewMain.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                drawerLayout.closeDrawers();
-                switch(item.getItemId()){
-                    case R.id.nav_preset_password_generation:
-                        openTemplatePasswordGeneration();
-                        return true;
-                    default:
-                        return true;
-                }
+        navigationViewMain.setNavigationItemSelectedListener((MenuItem item) -> {
+            drawerLayout.closeDrawers();
+            switch(item.getItemId()){
+                case R.id.nav_preset_password_generation:
+                    openTemplatePasswordGeneration(true);
+                    return true;
+                default:
+                    return true;
             }
         });
 
         navigationViewBottom = (NavigationView) findViewById(R.id.navigationView_drawer_navigation_bottom);
-        navigationViewBottom.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                drawerLayout.closeDrawers();
-                switch(item.getItemId()){
-                    case R.id.nav_about_us:
-                        openAboutUs();
-                        return true;
-                    case R.id.nav_help:
-                        openHelp();
-                        return true;
-                    default:
-                        return true;
-                }
+        navigationViewBottom.setNavigationItemSelectedListener((MenuItem item) -> {
+            drawerLayout.closeDrawers();
+            switch(item.getItemId()){
+                case R.id.nav_about_us:
+                    openInfo(true);
+                    return true;
+                case R.id.nav_help:
+                    openHelp(true);
+                    return true;
+                default:
+                    return true;
             }
         });
 
@@ -156,12 +159,6 @@ public class MainActivity extends AppCompatActivity {
                 adViewBottomBanner.setVisibility(View.GONE);
             }
         });
-
-        //set ActionBar title
-        final ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setTitle(getString(R.string.activity_preset_password_generation_title));
-        }
     }
 
     @Override
@@ -189,6 +186,36 @@ public class MainActivity extends AppCompatActivity {
         return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onHelpEntrySelected(HelpEntry entry) {
+        HelpEntryFragment f = new HelpEntryFragment();
+        f.setArguments(entry.toBundle());
+        startFragment(f, true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return;
+        }
+
+        super.onBackPressed();
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment f = fm.findFragmentById(R.id.frameLayout_main_fragment);
+        if(f instanceof PresetPasswordGenerationFragment){
+            selectNavigationDrawerItem(R.id.nav_preset_password_generation);
+        }
+        else if(f instanceof HelpListFragment || f instanceof HelpEntryFragment){
+            selectNavigationDrawerItem(R.id.nav_help);
+        }
+        else if(f instanceof InfoFragment){
+            selectNavigationDrawerItem(R.id.nav_about_us);
+        }
+
+    }
+
     /**
      * replaces the smart banner at the bottom of the screen with a new
      * smart banner and loads the ad for the banner.
@@ -197,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
      *
      */
     private void renewAdmobSmartBanner(){
-        //create new adview
+        //create new adView
         AdView newAdmobSmartBanner = new AdView(this);
         newAdmobSmartBanner.setAdSize(AdSize.SMART_BANNER);
         newAdmobSmartBanner.setAdUnitId(getString(R.string.admob_ad_id));
@@ -277,9 +304,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         final int sizeBottom = navigationViewBottom.getMenu().size();
-        for(int i = 0; i < sizeBottom; i++){
+        for(int i = 0; i < sizeBottom; i++) {
             boolean setChecked = false;
-            if(navigationViewBottom.getMenu().getItem(i).getItemId() == itemId){
+            if (navigationViewBottom.getMenu().getItem(i).getItemId() == itemId) {
                 setChecked = true;
             }
             navigationViewBottom.getMenu().getItem(i).setChecked(setChecked);
@@ -312,26 +339,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Display the about us fragment in the main fragment container.
+     * Display the info fragment in the main fragment container.
      * @author Tobias Hess
      * @since 27.07.2017
      * @param useBackStack
      *      add this transaction to the back stack?
      */
-    private void openAboutUs(boolean useBackStack){
+    private void openInfo(boolean useBackStack){
         Fragment f = new InfoFragment();
         startFragment(f, useBackStack);
         selectNavigationDrawerItem(R.id.nav_about_us);
     }
 
     /**
-     * Display the about us fragment in the main fragment container.
+     * Display the info fragment in the main fragment container.
      * Will add the transaction to the Fragment to the Back Stack!
      * @author Tobias Hess
      * @since 27.07.2017
      */
-    private void openAboutUs(){
-        openAboutUs(true);
+    private void openInfo(){
+        openInfo(true);
     }
 
     /**
@@ -342,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
      *      add this transaction to the back stack?
      */
     private void openHelp(boolean useBackStack){
-        Fragment f = new HelpFragment();
+        Fragment f = new HelpListFragment();
         startFragment(f, useBackStack);
         selectNavigationDrawerItem(R.id.nav_help);
     }
