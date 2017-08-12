@@ -11,4 +11,8 @@
     <color name="colorAccent">@color/colorSecondary</color>
 
     <color name="colorNavText">#333333</color>
+
+    <color name="colorCardDivider">#ddd</color>
+    <color name="colorImageButtonPressed">#ddd</color>
+    <color name="colorImageButtonRipple">#ccc</color>
 </resources>

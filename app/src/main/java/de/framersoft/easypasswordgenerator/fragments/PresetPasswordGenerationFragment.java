@@ -17,6 +17,7 @@ package de.framersoft.easypasswordgenerator.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -149,6 +152,27 @@ public class PresetPasswordGenerationFragment extends Fragment {
     private GeneratedPasswordsAdapter generatedPasswordsAdapter;
 
     /**
+     * the {@link ImageButton} to toggle the settings for password generation with
+     * @author Tobias Hess
+     * @since 12.08.2017
+     */
+    private ImageButton imageButtonToggleSettings;
+
+    /**
+     * the {@link ConstraintLayout} that contains the settings for password generation
+     * @author Tobias Hess
+     * @since 12.08.2017
+     */
+    private ConstraintLayout constraintLayoutSettingsContent;
+
+    /**
+     * is the settings cardview collapsed?
+     * @author Tobias Hess
+     * @since 12.08.2017
+     */
+    private boolean settingsCollapsed = false;
+
+    /**
      * empty constructor (required)
      */
     public PresetPasswordGenerationFragment() {
@@ -162,6 +186,13 @@ public class PresetPasswordGenerationFragment extends Fragment {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if(actionBar != null){
             actionBar.setTitle(getString(R.string.activity_preset_password_generation_title));
+        }
+
+        if(settingsCollapsed){
+            collapseSettingsCard();
+        }
+        else{
+            expandSettingsCard();
         }
     }
 
@@ -190,6 +221,13 @@ public class PresetPasswordGenerationFragment extends Fragment {
                 listViewGeneratedPasswords, false);
         listViewGeneratedPasswords.addHeaderView(presetPasswordConfiguration);
         listViewGeneratedPasswords.setAdapter(generatedPasswordsAdapter);
+
+        //create toggling for the header
+        imageButtonToggleSettings = (ImageButton) presetPasswordConfiguration.findViewById(R.id.imageButton_toggle_settings_collapse);
+        LinearLayout linearLayoutSettingsHeader = (LinearLayout) presetPasswordConfiguration.findViewById(R.id.linearLayout_settings_header);
+        constraintLayoutSettingsContent = (ConstraintLayout) presetPasswordConfiguration.findViewById(R.id.constraintLayout_settings_content);
+        linearLayoutSettingsHeader.setOnClickListener(view1 -> toggleSettingsCard());
+        imageButtonToggleSettings.setOnClickListener(view1 -> toggleSettingsCard());
 
         //get dynamic elements of the inflated configuration view
         spinnerPasswordType = (Spinner) presetPasswordConfiguration.findViewById(R.id.spinner_password_type);
@@ -250,7 +288,10 @@ public class PresetPasswordGenerationFragment extends Fragment {
         });
 
         //set the button listeners
-        buttonGenerate.setOnClickListener(v -> generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords()));
+        buttonGenerate.setOnClickListener(v -> {
+            generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords());
+            collapseSettingsCard();
+        });
 
         //starting mode: internet passwords
         switchMode(PASSWORD_MODE_INTERNET_PASSWORDS);
@@ -386,5 +427,43 @@ public class PresetPasswordGenerationFragment extends Fragment {
         }
 
         return generatedPasswords;
+    }
+
+    /**
+     * toggles the visibility of the content section of the settings cardview
+     * @author Tobias Hess
+     * @since 12.08.2017
+     */
+    private void toggleSettingsCard(){
+        if(settingsCollapsed){
+            expandSettingsCard();
+        }
+        else{
+            collapseSettingsCard();
+        }
+    }
+
+    /**
+     * collapses the settings card
+     * @author Tobias Hess
+     * @since 12.08.2017
+     */
+    private void collapseSettingsCard(){
+        constraintLayoutSettingsContent.setVisibility(View.GONE);
+        imageButtonToggleSettings.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+        imageButtonToggleSettings.setContentDescription(getString(R.string.content_description_collapse_settings));
+        settingsCollapsed = true;
+    }
+
+    /**
+     * expands the settings card
+     * @author Tobias Hess
+     * @since 12.08.2017
+     */
+    private void expandSettingsCard(){
+        constraintLayoutSettingsContent.setVisibility(View.VISIBLE);
+        imageButtonToggleSettings.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+        imageButtonToggleSettings.setContentDescription(getString(R.string.content_description_expand_settings));
+        settingsCollapsed = false;
     }
 }
