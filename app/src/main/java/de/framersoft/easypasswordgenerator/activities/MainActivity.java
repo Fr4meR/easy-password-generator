@@ -35,10 +35,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.kobakei.ratethisapp.RateThisApp;
 
 import de.framersoft.easypasswordgenerator.R;
 import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
-import de.framersoft.easypasswordgenerator.fragments.InfoFragment;
+import de.framersoft.easypasswordgenerator.fragments.info.InfoFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpEntryFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment;
 import de.framersoft.easypasswordgenerator.fragments.PresetPasswordGenerationFragment;
@@ -159,6 +160,8 @@ public class MainActivity extends AppCompatActivity
                 adViewBottomBanner.setVisibility(View.GONE);
             }
         });
+
+        rateThisAppDialog();
     }
 
     @Override
@@ -382,5 +385,24 @@ public class MainActivity extends AppCompatActivity
      */
     private void openHelp(){
         openHelp(true);
+    }
+
+    /**
+     * initialization code for the rate this app dialog.
+     * it will open a please rate this app dialog
+     * if certain open / time criteria are met.
+     * @author Tobias Hess
+     * @since 12.08.2017
+     */
+    private void rateThisAppDialog(){
+        RateThisApp.Config config = new RateThisApp.Config();
+        config.setTitle(R.string.rate_dialog_title);
+        config.setMessage(R.string.rate_dialog_message);
+        config.setYesButtonText(R.string.rate_dialog_ok);
+        config.setNoButtonText(R.string.rate_dialog_no);
+        config.setCancelButtonText(R.string.rate_dialog_cancel);
+
+        RateThisApp.onCreate(this);
+        RateThisApp.showRateDialogIfNeeded(this);
     }
 }

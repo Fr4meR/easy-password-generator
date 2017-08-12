@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.adapters.textSubtext;
+package de.framersoft.easypasswordgenerator.adapters.info;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,17 +22,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import de.framersoft.easypasswordgenerator.R;
 
 /**
- * Adapter to populate a list with textes and subtextes.
+ * Adapter to populate a list for the info fragment
  * @author Tobias Hess
  * @since 30.07.2017
  */
 
-public class TextSubtextAdapter extends BaseAdapter {
+public class InfoAdapter extends BaseAdapter {
 
 
     /**
@@ -48,11 +49,10 @@ public class TextSubtextAdapter extends BaseAdapter {
      * @author Tobias Hess
      * @since 30.07.2017
      */
-    private final List<TextSubtext> contents;
+    private final List<InfoEntry> contents = new LinkedList<>();
 
-    public TextSubtextAdapter(Context context, List<TextSubtext> contents){
+    public InfoAdapter(Context context){
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.contents = contents;
     }
 
     @Override
@@ -76,20 +76,66 @@ public class TextSubtextAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextSubtext item = (TextSubtext) getItem(position);
+        InfoEntry item = (InfoEntry) getItem(position);
 
         if(convertView == null){
             convertView = layoutInflater.inflate(R.layout.list_item_text_subtext, parent, false);
         }
 
-        //main text
+        //header
         TextView mainText = (TextView) convertView.findViewById(R.id.textView_text);
-        mainText.setText(item.getText());
+        mainText.setText(item.getHeader());
 
-        //subtext
+        //content
         TextView subText = (TextView) convertView.findViewById(R.id.textView_subtext);
-        subText.setText(item.getSubtext());
+        subText.setText(item.getContent());
 
         return convertView;
+    }
+
+    /**
+     * adds an entry to the adapter
+     * @author Tobias Hess
+     * @since 12.08.2017
+     * @param entry
+     *      the {@link InfoEntry} to add
+     */
+    private void addEntry(InfoEntry entry){
+        contents.add(entry);
+    }
+
+    /**
+     * adds a simple text entry
+     * @author Tobias Hess
+     * @since 12.08.2017
+     * @param header
+     *      the header to add
+     * @param content
+     *      the content to add
+     */
+    public void addTextEntry(String header, String content){
+        addEntry(new InfoEntry(header, content, InfoEntry.TYPE_CONTENT_TEXT));
+    }
+
+    /**
+     * adds an email entry
+     * @param header
+     *      the header to add
+     * @param email
+     *      the email email to add
+     */
+    public void addEmailEntry(String header, String email){
+        addEntry(new InfoEntry(header, email, InfoEntry.TYPE_CONTENT_EMAIL));
+    }
+
+    /**
+     * adds an url entry
+     * @param header
+     *      the header of the entry
+     * @param url
+     *      the url to add
+     */
+    public void addURLEntry(String header, String url){
+        addEntry(new InfoEntry(header, url, InfoEntry.TYPE_CONTENT_URL));
     }
 }
