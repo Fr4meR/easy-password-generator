@@ -42,7 +42,7 @@ import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
 import de.framersoft.easypasswordgenerator.fragments.info.InfoFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpEntryFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment;
-import de.framersoft.easypasswordgenerator.fragments.PresetPasswordGenerationFragment;
+import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.PresetPasswordGenerationFragment;
 
 /**
  * the main activity of the app. has an navigation drawer that will switch
