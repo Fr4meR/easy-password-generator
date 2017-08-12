@@ -3,6 +3,6 @@
     android:id="@+id/listView_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.framersoft.easypasswordgenerator.fragments.InfoFragment">
+    tools:context="de.framersoft.easypasswordgenerator.fragments.info.InfoFragment">
 
 </ListView>

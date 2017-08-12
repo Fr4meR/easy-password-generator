@@ -36,6 +36,9 @@
     <string name="info_text_version_code">Build Number</string>
     <string name="info_text_version_common">Common Version</string>
 
+    <string name="info_contact_email_subject">Contact: Easy Password Generator</string>
+    <string name="info_contact_email_intent_chooser">Send E-mail</string>
+
     <string name="help_header_missing">No help topic available</string>
     <string name="help_content_missing">No content available.</string>
 

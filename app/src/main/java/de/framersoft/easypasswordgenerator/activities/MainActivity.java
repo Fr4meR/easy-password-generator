@@ -38,7 +38,7 @@ import com.google.android.gms.ads.MobileAds;
 
 import de.framersoft.easypasswordgenerator.R;
 import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
-import de.framersoft.easypasswordgenerator.fragments.InfoFragment;
+import de.framersoft.easypasswordgenerator.fragments.info.InfoFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpEntryFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment;
 import de.framersoft.easypasswordgenerator.fragments.PresetPasswordGenerationFragment;

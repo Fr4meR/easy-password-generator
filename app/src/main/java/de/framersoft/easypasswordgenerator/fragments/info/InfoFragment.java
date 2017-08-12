@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.fragments;
+package de.framersoft.easypasswordgenerator.fragments.info;
 
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,18 +31,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import de.framersoft.common.constants.Version;
 import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.adapters.textSubtext.TextSubtext;
-import de.framersoft.easypasswordgenerator.adapters.textSubtext.TextSubtextAdapter;
+import de.framersoft.easypasswordgenerator.adapters.info.InfoAdapter;
+import de.framersoft.easypasswordgenerator.adapters.info.InfoEntry;
 
 /**
  * This {@link Fragment} is used for the about use page.
- * It will display informations about the developer and
+ * It will display information about the developer and
  * the used libraries.
  * @author Tobias Hess
  * @since 27.07.2017
@@ -91,23 +91,35 @@ public class InfoFragment extends Fragment {
             buildNumber = "---";
         }
 
-        List<TextSubtext> contents = new ArrayList<>();
-        contents.add(new TextSubtext(getString(R.string.info_text_author),
-                getString(R.string.info_subtext_author)));
-        contents.add(new TextSubtext(getString(R.string.info_text_email),
-                getString(R.string.info_subtext_email)));
-        contents.add(new TextSubtext(getString(R.string.info_text_source_code),
-                getString(R.string.info_subtext_source_code)));
-        contents.add(new TextSubtext(getString(R.string.info_text_version_name),
-                versionName));
-        contents.add(new TextSubtext(getString(R.string.info_text_version_code),
-                buildNumber));
-        contents.add(new TextSubtext(getString(R.string.info_text_version_common),
-                Version.VERSION_STRING));
-
-        TextSubtextAdapter adapter = new TextSubtextAdapter(getActivity(), contents);
+        InfoAdapter adapter = new InfoAdapter(getActivity());
+        adapter.addTextEntry(getString(R.string.info_text_author), getString(R.string.info_subtext_author));
+        adapter.addEmailEntry(getString(R.string.info_text_email), getString(R.string.info_subtext_email));
+        adapter.addURLEntry(getString(R.string.info_text_source_code), getString(R.string.info_subtext_source_code));
+        adapter.addTextEntry(getString(R.string.info_text_version_name), versionName);
+        adapter.addTextEntry(getString(R.string.info_text_version_code), buildNumber);
+        adapter.addTextEntry(getString(R.string.info_text_version_common), Version.VERSION_STRING);
 
         ListView listViewInfo = (ListView) view.findViewById(R.id.listView_info);
         listViewInfo.setAdapter(adapter);
+
+        //set click listener
+        listViewInfo.setOnItemClickListener((adapterView, view1, i, l) ->  {
+            InfoEntry entry = (InfoEntry) adapterView.getItemAtPosition(i);
+
+            switch(entry.getType()){
+                case InfoEntry.TYPE_CONTENT_EMAIL:
+                    String mailTo = "mailto:" + entry.getContent() + "?subject=" + getString(R.string.info_contact_email_subject);
+
+                    Intent intentEmail = new Intent(Intent.ACTION_SENDTO);
+                    intentEmail.setData(Uri.parse(mailTo));
+                    startActivity(Intent.createChooser(intentEmail, getString(R.string.info_contact_email_intent_chooser)));
+                    break;
+                case InfoEntry.TYPE_CONTENT_URL:
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+                    browserIntent.setData(Uri.parse(entry.getContent()));
+                    startActivity(browserIntent);
+                    break;
+            }
+        });
     }
 }
