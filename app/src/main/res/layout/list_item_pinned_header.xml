@@ -10,4 +10,7 @@
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:paddingTop="6dp"
     android:paddingBottom="6dp"
-    android:background="@color/colorPrimaryLight" />
+    android:textSize="16sp"
+    android:textStyle="bold"
+    android:textColor="#fff"
+    android:background="@color/colorAccent" />

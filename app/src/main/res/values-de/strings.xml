@@ -114,4 +114,10 @@
     <string name="info_contact_email_intent_chooser">E-Mail senden</string>
     <string name="info_contact_email_subject">Kontakt: Easy Password Generator</string>
 
+    <string name="rate_dialog_title">Bewerte diese App</string>
+    <string name="rate_dialog_message">Wenn dir diese App gefällt, nimm dir doch einen Moment Zeit und bewerte sie. Danke für deine Unterstützung!</string>
+    <string name="rate_dialog_ok">Bewerten</string>
+    <string name="rate_dialog_cancel">Später</string>
+    <string name="rate_dialog_no">Niemals</string>
+
 </resources>

@@ -37,6 +37,12 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -50,5 +56,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:11.0.4'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'de.halfbit:pinned-section-listview:1.0.0'
+    compile 'io.github.kobakei:ratethisapp:1.2.0'
     testCompile 'junit:junit:4.12'
 }
