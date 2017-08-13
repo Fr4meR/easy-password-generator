@@ -17,7 +17,6 @@ package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,7 +110,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @author Tobias Hess
      * @since 19.07.2017
      */
-    private int minPasswordLength;
+    private int minPasswordLength = 3;
 
     /**
      * the adapter that is used to populate the data of the generated passwords
@@ -129,7 +128,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
     private ImageButton imageButtonToggleSettings;
 
     /**
-     * the {@link ConstraintLayout} that contains the settings for password generation
+     * the {@link LinearLayout} that contains the settings for password generation
      * @author Tobias Hess
      * @since 12.08.2017
      */
@@ -244,6 +243,9 @@ public abstract class APasswordGenerationFragment extends Fragment {
             generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords());
             collapseSettingsCard();
         });
+
+        refreshNumberOfPasswordsTextView();
+        refreshPasswordLengthTextView();
     }
 
     @Override

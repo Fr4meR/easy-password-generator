@@ -17,7 +17,6 @@ package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -28,7 +27,7 @@ import de.framersoft.common.password.generator.PasswordGenerator;
 import de.framersoft.easypasswordgenerator.R;
 
 /**
- * This {@link Fragment} is used for preset password generation.
+ * This Fragment is used for preset password generation.
  * The user can select from a list of password templates to generate
  * his passwords, that will be displayed in a list under the settings
  * for the password generation.

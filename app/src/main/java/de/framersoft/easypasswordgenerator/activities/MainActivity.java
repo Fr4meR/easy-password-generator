@@ -42,6 +42,7 @@ import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
 import de.framersoft.easypasswordgenerator.fragments.info.InfoFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpEntryFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment;
+import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.CustomPasswordGeneration;
 import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.PresetPasswordGenerationFragment;
 
 /**
@@ -124,8 +125,10 @@ public class MainActivity extends AppCompatActivity
             drawerLayout.closeDrawers();
             switch(item.getItemId()){
                 case R.id.nav_preset_password_generation:
-                    openTemplatePasswordGeneration(true);
+                    openTemplatePasswordGeneration();
                     return true;
+                case R.id.nav_custom_password_generation:
+                    openCustomPasswordGeneration();
                 default:
                     return true;
             }
@@ -136,10 +139,10 @@ public class MainActivity extends AppCompatActivity
             drawerLayout.closeDrawers();
             switch(item.getItemId()){
                 case R.id.nav_about_us:
-                    openInfo(true);
+                    openInfo();
                     return true;
                 case R.id.nav_help:
-                    openHelp(true);
+                    openHelp();
                     return true;
                 default:
                     return true;
@@ -339,6 +342,30 @@ public class MainActivity extends AppCompatActivity
      */
     private void openTemplatePasswordGeneration(){
         openTemplatePasswordGeneration(true);
+    }
+
+    /**
+     * Display the custom password generation fragment in the main fragment
+     * container. Will add the transaction to the backstack!
+     * @author Tobias Hess
+     * @since 13.08.2017
+     */
+    private void openCustomPasswordGeneration(){
+        openCustomPasswordGeneration(true);
+    }
+
+    /**
+     * Display the custom password generation fragment in the main fragment
+     * container.
+     * @author Tobias Hess
+     * @since 13.08.2017
+     * @param useBackStack
+     *      add to the backstack?
+     */
+    private void openCustomPasswordGeneration(boolean useBackStack){
+        Fragment f = new CustomPasswordGeneration();
+        startFragment(f, useBackStack);
+        selectNavigationDrawerItem(R.id.nav_custom_password_generation);
     }
 
     /**
