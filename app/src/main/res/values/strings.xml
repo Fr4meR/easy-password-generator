@@ -33,6 +33,7 @@
     <string name="custom_password_settings_special_characters">Special Characters</string>
     <string name="custom_password_section_length">Length</string>
     <string name="custom_password_speaking_password">Speaking Password</string>
+    <string name="custom_password_at_least_one_checkbox">At least one Checkbox must be active.</string>
 
     <string name="navi_drawer_open">Open Navigation Drawer</string>
     <string name="navi_drawer_close">Close Navigation Drawer</string>

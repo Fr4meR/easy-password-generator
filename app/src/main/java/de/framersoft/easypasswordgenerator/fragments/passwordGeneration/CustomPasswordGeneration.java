@@ -217,7 +217,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
                 !checkBox0To9.isChecked() && !checkBoxSpecialCharacters.isChecked()){
 
             checkBox.setChecked(true);
-            Toast.makeText(getActivity(), "Dies ist ein Test", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.custom_password_at_least_one_checkbox),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -131,5 +131,6 @@
     <string name="custom_password_settings_title_leading_characters">Führende Zeichen</string>
     <string name="custom_password_settings_title_main">Hauptzeichen</string>
     <string name="custom_password_speaking_password">Sprechendes Passwort</string>
+    <string name="custom_password_at_least_one_checkbox">Es muss mindestens eine Checkbox aktiv sein.</string>
 
 </resources>
