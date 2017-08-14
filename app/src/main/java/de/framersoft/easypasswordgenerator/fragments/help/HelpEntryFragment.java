@@ -41,7 +41,7 @@ import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
 public class HelpEntryFragment extends Fragment {
 
     /**
-     * the ressource id of the title
+     * the resource id of the title
      * @author Tobias Hess
      * @since 08.08.2017
      */

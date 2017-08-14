@@ -73,6 +73,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
      * GUI elements used for the whole password
      */
     private CheckBox checkBoxSpeakingPassword;
+    private CheckBox checkBoxAvoidSimilarCharacters;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -102,6 +103,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         textViewPostfixLength = (TextView) additionalSettings.findViewById(R.id.textView_postfix_length);
 
         checkBoxSpeakingPassword = (CheckBox) additionalSettings.findViewById(R.id.checkBox_speaking_password);
+        checkBoxAvoidSimilarCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_avoid_similar_characters);
 
         //initializes the SeekBars by adding listeners / settings the
         //textview that displays the value
@@ -135,7 +137,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
             alphabet_prefix += AlphabetConstants.ALPHABET_NUMBERS;
         }
         if(checkBoxPrefixSpecialCharacters.isChecked()){
-            alphabet_prefix += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS;
+            alphabet_prefix += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS + AlphabetConstants.ALPHABET_PUNCTUATION;
         }
 
         //main options
@@ -150,7 +152,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
             alphabet_main += AlphabetConstants.ALPHABET_NUMBERS;
         }
         if(checkBoxSpecialCharacters.isChecked()){
-            alphabet_main += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS;
+            alphabet_main += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS + AlphabetConstants.ALPHABET_PUNCTUATION;
         }
 
         //postfix options
@@ -165,7 +167,14 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
             alphabet_postfix += AlphabetConstants.ALPHABET_NUMBERS;
         }
         if(checkBoxPostfixSpecialCharacters.isChecked()){
-            alphabet_postfix += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS;
+            alphabet_postfix += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS + AlphabetConstants.ALPHABET_PUNCTUATION;
+        }
+
+        //avoid similar characters?
+        if(checkBoxAvoidSimilarCharacters.isChecked()){
+            alphabet_prefix = alphabet_prefix.replaceAll("[IO1l0]", "");
+            alphabet_main = alphabet_main.replaceAll("[IO1l0]", "");
+            alphabet_postfix = alphabet_postfix.replaceAll("[IO1l0]", "");
         }
 
         PasswordGenerator generator = new PasswordGenerator(alphabet_main, getPasswordLength());

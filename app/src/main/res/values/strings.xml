@@ -33,6 +33,7 @@
     <string name="custom_password_settings_special_characters">Special Characters</string>
     <string name="custom_password_section_length">Length</string>
     <string name="custom_password_speaking_password">Speaking Password</string>
+    <string name="custom_password_avoid_similar_characters">Avoid similar characters</string>
     <string name="custom_password_at_least_one_checkbox">At least one Checkbox must be active.</string>
 
     <string name="navi_drawer_open">Open Navigation Drawer</string>
@@ -136,25 +137,31 @@
             </p>
 
             <p>
-            <b>Password length</b><br />
-            Use this slider to set the desired password length. The minimum length of the password
-            will always be length of the leading / trailing characters + 1.
-        </p>
-        <p>
-            <b>Number of passwords</b><br />
-               Use this slider to set the number of passwords to create.
-        </p>
-        <p>
-            <b>Generate</b><br />
-            Use this button to generate the passwords with the settings you have made.
-        </p>
+                <b>Avoid similar characters</b><br />
+                If this checkbox is active the generated password will not contain similar looking
+                characters like 1 and l, O and 0, etc.
+            </p>
 
-        <p>
-            If the passwords are generated, you will see the generated passwords in a list.
-            For each password, a rating for its strength is displayed. A green rating means
-            <b>strong</ b>, a yellow <b>medium</ b>, and a red <b>weak</ b>. In addition, a
-            password can be copied to the clipboard via the respective button.
-        </p>
+            <p>
+                <b>Password length</b><br />
+                Use this slider to set the desired password length. The minimum length of the password
+                will always be length of the leading / trailing characters + 1.
+            </p>
+            <p>
+                <b>Number of passwords</b><br />
+                   Use this slider to set the number of passwords to create.
+            </p>
+            <p>
+                <b>Generate</b><br />
+                Use this button to generate the passwords with the settings you have made.
+            </p>
+
+            <p>
+                If the passwords are generated, you will see the generated passwords in a list.
+                For each password, a rating for its strength is displayed. A green rating means
+                <b>strong</ b>, a yellow <b>medium</ b>, and a red <b>weak</ b>. In addition, a
+                password can be copied to the clipboard via the respective button.
+            </p>
         ]]>
     </string>
     <string name="help_content_menu_items_help">

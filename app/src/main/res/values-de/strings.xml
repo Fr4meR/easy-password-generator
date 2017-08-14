@@ -100,6 +100,12 @@
             </p>
 
             <p>
+                <b>Ähnliche Zeichen vermeiden</b><br />
+                Wenn diese Checkbox aktiv ist werden ähnliche Zeichen, wie 1 und l, O und 0, etc.,
+                vermieden.
+            </p>
+
+            <p>
                 <b>Länge des Passworts</b><br />
                 Mit diesem Slider können Sie die gewünschte Passwortlänge einstellen. Die Länge
                 des Passwortes ist immer mindestens Länge der führenden und folgenden Zeichen + 1.
@@ -204,5 +210,6 @@
     <string name="custom_password_settings_title_main">Hauptzeichen</string>
     <string name="custom_password_speaking_password">Sprechendes Passwort</string>
     <string name="custom_password_at_least_one_checkbox">Es muss mindestens eine Checkbox aktiv sein.</string>
+    <string name="custom_password_avoid_similar_characters">Ähnliche Zeichen vermeiden</string>
 
 </resources>
