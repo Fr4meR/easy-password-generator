@@ -4,7 +4,7 @@
 
     <string name="preset_password_generation_card_title">Einstellungen</string>
 
-    <string name="activity_preset_password_generation_title">Vorlagen-Passwort</string>
+    <string name="activity_preset_password_generation_title">Vorlagen-Passwörter</string>
     <string name="activity_preset_password_generation_password_type">Art des Passworts</string>
     <string name="activity_preset_password_generation_password_length">Länge des Passworts</string>
     <string name="activity_preset_password_generation_password_generate">Generieren</string>
@@ -67,6 +67,75 @@
         </p>
         ]]>
     </string>
+    <string name="help_content_menu_items_custom_passwords">
+        <![CDATA[
+            <p>Hier können benutzerdefinierte Passwörter generiert werden.</p>
+            <p>Beschreibung der Funktionen:</p>
+
+            <p>
+                <b>Führende Zeichen / Folgende Zeichen</b><br />
+                Führende / Folgende Zeichen stehen am Anfang / Ende des Passwortes. Für diese kann
+                man über die Checkboxen konfigurieren, welche Zeichen vorkommen können und über den
+                Slider wie viele führende Zeichen im Passwort vorkommen sollen. Stellt man die
+                Anzahl der führenden / folgenden Zeichen auf 0 oder deaktiviert alle Zeichen werden
+                keine führenden / folgenden Zeichen im Passwort vorkommen.
+            </p>
+
+            <p>
+                <b>Hauptzeichen</b><br />
+                Die Hauptzeichen bilden den Hauptteil des zu generierenden Passwortes. Für diesen
+                Teil kann man über die Checkboxen konfigurieren welche Zeichen vorkommen können.
+                Hierbei muss mindestens eine Checkbox immer aktiv sein. Die Länge des Hauptteils wird
+                indirekt über die Passwortlänge definiert.
+            </p>
+
+            <p>
+                <b>Sprechendes Passwort</b><br />
+                Über die Checkbox Sprechendes Passwort kann man diese Funktion aktivieren. Damit diese
+                Option verfügbar ist muss mindestens ein Bereich (Führende Zeichen, Hauptteil, Folgende
+                Zeichen) nur aus Buchstaben bestehen. <br />
+                Diese Funktion sorgt dafür, dass in Bereichen, die nur aus Buchstaben bestehen
+                aussprechbare Passwörter entstehen. Aussprechbar meint in diesem Fall, dass abwechselnd
+                ein Vokal und ein Konsonant im Passwort erzeugt werden.
+            </p>
+
+            <p>
+                <b>Länge des Passworts</b><br />
+                Mit diesem Slider können Sie die gewünschte Passwortlänge einstellen. Die Länge
+                des Passwortes ist immer mindestens Länge der führenden und folgenden Zeichen + 1.
+            </p>
+            <p>
+                <b>Anzahl der Passwörter</b><br />
+                Mit diesem Slider können Sie die Anzahl der zu erstellenden Passwörter einstellen.
+            </p>
+            <p>
+                <b>Generieren</b><br />
+                Über diesen Button generieren Sie die Passwörter mit den vorgenommenen Einstellungen.
+            </p>
+
+            <p>
+                Wenn die Passwörter generiert sind, sehen Sie die generierten Passwörter in einer Liste.
+                Für jedes Passwort wird zusätzlich ein Rating für dessen Stärke angezeigt. Ein grünes Rating
+                bedeutet <b>stark</b>, ein gelbes <b>mittel</b> und ein rotes <b>schwach</b>. Zusätzlich
+                kann ein Passwort über den jeweiligen Button in die Zwischenablage kopiert werden.
+            </p>
+        ]]>
+    </string>
+    <string name="help_content_menu_items_help">
+        <![CDATA[
+            <p>
+                Unter diesem Menüpunkt finden Sie die Hilfe der App.
+            </p>
+        ]]>
+    </string>
+    <string name="help_content_menu_items_info">
+        <![CDATA[
+            <p>
+                Unter diesem Menüpunkt finden Sie generelle Informationen zur App, wie z.B.
+                den Autor, eine E-Mail Adresse, um Kontakt aufzunehmen, Versionsinformationen, etc.
+            </p>
+        ]]>
+    </string>
     <string name="help_content_templates_complex_passwords">
         <![CDATA[
             <p>Mit dieser Vorlage können komplexe Passwörter erzeugt werden.</p>
@@ -108,7 +177,10 @@
     <string name="help_header_menu_items">Menüpunkte</string>
     <string name="help_header_missing">Keine Überschrift vorhanden</string>
     <string name="help_header_templates">Passwortvorlagen</string>
-    <string name="help_menu_items_template_passwords">Vorlagen-Passwort</string>
+    <string name="help_menu_items_template_passwords">Vorlagen-Passwörter</string>
+    <string name="help_menu_items_custom_passwords">Benutzerd. Passwörter</string>
+    <string name="help_menu_items_help">Hilfe</string>
+    <string name="help_menu_items_info">Info</string>
     <string name="help_templates_complex_passwords">Komplexes Password</string>
     <string name="help_templates_internet_passwords">Internet Passwort</string>
     <string name="help_templates_wep_keys">WEP-Schlüssel</string>

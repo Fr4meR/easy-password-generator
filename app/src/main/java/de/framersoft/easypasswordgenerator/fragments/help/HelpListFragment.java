@@ -72,6 +72,10 @@ public class HelpListFragment extends Fragment {
         ArrayList<HelpEntry> entriesMenuItems = new ArrayList<>();
         entriesMenuItems.add(new HelpEntry(R.string.help_menu_items_template_passwords,
                 R.string.help_content_menu_items_template_passwords));
+        entriesMenuItems.add(new HelpEntry(R.string.help_menu_items_custom_passwords,
+                R.string.help_content_menu_items_custom_passwords));
+        entriesMenuItems.add(new HelpEntry(R.string.help_menu_items_help, R.string.help_content_menu_items_help));
+        entriesMenuItems.add(new HelpEntry(R.string.help_menu_items_info, R.string.help_content_menu_items_info));
 
         //template passwords entries
         ArrayList<HelpEntry> entriesTemplatePasswords = new ArrayList<>();

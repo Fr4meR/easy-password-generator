@@ -61,6 +61,9 @@
 
     <string name="help_header_menu_items">Menu Items</string>
     <string name="help_menu_items_template_passwords">Template Passwords</string>
+    <string name="help_menu_items_custom_passwords">Custom Passwords</string>
+    <string name="help_menu_items_help">Help</string>
+    <string name="help_menu_items_info">Info</string>
 
     <string name="help_header_templates">Password Templates</string>
     <string name="help_templates_internet_passwords">Internet Passwords</string>
@@ -100,6 +103,76 @@
         </p>
         ]]>
     </string>
+    <string name="help_content_menu_items_custom_passwords">
+        <![CDATA[
+            <p>Under this menu item custom passwords can be created.</p>
+            <p>Description of the functions:</p>
+
+            <p>
+                <b>Leading Characters / Trailing Characters</b><br />
+                Leading / Trailing Characters will be generated at the beginning / end of the password.
+                For these you can use the checkboxes to configure which characters can occur and with
+                the slider u can configure how many leading / trailing characters will be in the password.
+                If you set the number of leading / trailing characters to 0 or deactivate all characters
+                no leading / trailing characters will occur in the password.
+            </p>
+
+            <p>
+                <b>Main Characters</b><br />
+                The main characters will build the main part of the generated password. For this part
+                the checkboxes can be used to configure which characters can occur. At least one checkbox
+                has to be active. The length of the main part will be determined indirectly via the
+                password length.
+            </p>
+
+            <p>
+                <b>Speaking Password</b><br />
+                You can activate this function via the Speaking Password checkbox. For this option to
+                be available, at least one area (Leading Characters, Main Characters, Trailing Characters)
+                must consist of letters only.<br />
+                This feature ensures that in sections that are containing only of letters a pronounceable
+                password will be generated. Pronounceable means that a vowel and a consonant will be generated
+                alternately.
+            </p>
+
+            <p>
+            <b>Password length</b><br />
+            Use this slider to set the desired password length. The minimum length of the password
+            will always be length of the leading / trailing characters + 1.
+        </p>
+        <p>
+            <b>Number of passwords</b><br />
+               Use this slider to set the number of passwords to create.
+        </p>
+        <p>
+            <b>Generate</b><br />
+            Use this button to generate the passwords with the settings you have made.
+        </p>
+
+        <p>
+            If the passwords are generated, you will see the generated passwords in a list.
+            For each password, a rating for its strength is displayed. A green rating means
+            <b>strong</ b>, a yellow <b>medium</ b>, and a red <b>weak</ b>. In addition, a
+            password can be copied to the clipboard via the respective button.
+        </p>
+        ]]>
+    </string>
+    <string name="help_content_menu_items_help">
+        <![CDATA[
+            <p>
+                This menu items contains the help of the app.
+            </p>
+        ]]>
+    </string>
+    <string name="help_content_menu_items_info">
+        <![CDATA[
+            <p>
+                This menu item contains some meta information about this app, e.g. the author,
+                a contact e-mail address, version information, etc.
+            </p>
+        ]]>
+    </string>
+
     <string name="help_content_templates_internet_passwords">
         <![CDATA[
             <p>Use this template to create memorable passwords.</p>
