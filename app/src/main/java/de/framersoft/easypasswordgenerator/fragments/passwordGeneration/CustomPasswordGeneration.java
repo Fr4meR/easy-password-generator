@@ -15,6 +15,7 @@
  */
 package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -194,12 +195,36 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
      * @since 13.08.2017
      */
     private void initCheckBoxes(){
-        checkBoxAToZUpperCase.setOnCheckedChangeListener((buttonView, isChecked) -> checkMainSectionCheckBoxSate(buttonView));
-        checkBoxAToZLowerCase.setOnCheckedChangeListener((buttonView, isChecked) -> checkMainSectionCheckBoxSate(buttonView));
-        checkBox0To9.setOnCheckedChangeListener((buttonView, isChecked) -> checkMainSectionCheckBoxSate(buttonView));
-        checkBoxSpecialCharacters.setOnCheckedChangeListener((buttonView, isChecked) -> checkMainSectionCheckBoxSate(buttonView));
 
-        //TODO create check if speaking password is possible
+        //listeners for the prefix section
+        checkBoxPrefixAToZUpperCase.setOnCheckedChangeListener((compoundButton, b) -> checkSpeakingPasswordPossible());
+        checkBoxPrefixAToZLowerCase.setOnCheckedChangeListener((compoundButton, b) -> checkSpeakingPasswordPossible());
+        checkBoxPrefix0To9.setOnCheckedChangeListener((compoundButton, b) -> checkSpeakingPasswordPossible());
+        checkBoxPrefixSpecialCharacters.setOnCheckedChangeListener((compoundButton, b) -> checkSpeakingPasswordPossible());
+
+        //listeners of the main section
+        checkBoxAToZUpperCase.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkMainSectionCheckBoxSate(buttonView);
+            checkSpeakingPasswordPossible();
+        });
+        checkBoxAToZLowerCase.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkMainSectionCheckBoxSate(buttonView);
+            checkSpeakingPasswordPossible();
+        });
+        checkBox0To9.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkMainSectionCheckBoxSate(buttonView);
+            checkSpeakingPasswordPossible();
+        });
+        checkBoxSpecialCharacters.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            checkMainSectionCheckBoxSate(buttonView);
+            checkSpeakingPasswordPossible();
+        });
+
+        //listeners for the postfix section
+        checkBoxPostfixAToZUpperCase.setOnCheckedChangeListener((compoundButton, b) -> checkSpeakingPasswordPossible());
+        checkBoxPostfixAToZLowerCase.setOnCheckedChangeListener((compoundButton, b) -> checkSpeakingPasswordPossible());
+        checkBoxPostfix0To9.setOnCheckedChangeListener((compoundButton, b) -> checkSpeakingPasswordPossible());
+        checkBoxPostfixSpecialCharacters.setOnCheckedChangeListener((compoundButton, b) -> checkSpeakingPasswordPossible());
     }
 
     /**
@@ -223,6 +248,48 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     }
 
     /**
+     * checks if a spaking password is possible and sets the state of the corresponding CheckBox
+     * accordingly. A speaking password is possible if at least one section of the password
+     * contains only of letters.
+     * @author Tobias Hess
+     * @since 14.08.2017
+     */
+    private void checkSpeakingPasswordPossible(){
+        //if at least one section contains only of letters
+        //speaking password is possible
+        boolean speakingPasswordPossible = false;
+
+        //check prefix section
+        if(seekBarPrefixLength.getProgress() > 0 && (checkBoxPrefixAToZUpperCase.isChecked() || checkBoxPrefixAToZLowerCase.isChecked()) &&
+                !checkBoxPrefix0To9.isChecked() && !checkBoxPrefixSpecialCharacters.isChecked()){
+
+            speakingPasswordPossible = true;
+        }
+
+        //check main section
+        if((checkBoxAToZUpperCase.isChecked() || checkBoxAToZLowerCase.isChecked()) &&
+                !checkBox0To9.isChecked() && !checkBoxSpecialCharacters.isChecked()){
+
+            speakingPasswordPossible = true;
+        }
+
+        //check postfix section
+        if(seekBarPostfixLength.getProgress() > 0 && (checkBoxPostfixAToZUpperCase.isChecked() || checkBoxPostfixAToZLowerCase.isChecked()) &&
+                !checkBoxPostfix0To9.isChecked() && !checkBoxPostfixSpecialCharacters.isChecked()){
+
+            speakingPasswordPossible = true;
+        }
+
+        if(speakingPasswordPossible){
+            checkBoxSpeakingPassword.setEnabled(true);
+        }
+        else{
+            checkBoxSpeakingPassword.setEnabled(false);
+            checkBoxSpeakingPassword.setChecked(false);
+        }
+    }
+
+    /**
      * initializes the SeekBars by adding the listeners to them.
      * @author Tobias Hess
      * @since 13.08.2017
@@ -236,6 +303,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
                 //make sure that the minimal password length is at least the length of
                 //pre- and postfix
                 setMinPasswordLength(getPrefixLength() + getPostfixLength() + 1);
+
+                checkSpeakingPasswordPossible();
             }
 
             @Override
@@ -258,6 +327,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
                 //make sure that the minimal password length is at least the length of
                 //pre- and postfix
                 setMinPasswordLength(getPrefixLength() + getPostfixLength() + 1);
+
+                checkSpeakingPasswordPossible();
             }
 
             @Override
@@ -281,6 +352,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
      * @author Tobias Hess
      * @since 13.08.2017
      */
+    @SuppressLint("SetTextI18n")
     private void refreshPrefixLengthSeekBar(){
         textViewPrefixLength.setText(Integer.toString(getPrefixLength()));
     }
@@ -290,6 +362,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
      * @author Tobias Hess
      * @since 13.08.2017
      */
+    @SuppressLint("SetTextI18n")
     private void refreshPostfixLengthSeekBar(){
         textViewPostfixLength.setText(Integer.toString(getPostfixLength()));
     }
