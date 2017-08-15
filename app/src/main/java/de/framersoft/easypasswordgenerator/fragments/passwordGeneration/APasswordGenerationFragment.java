@@ -15,13 +15,23 @@
  */
 package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewStub;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -155,6 +165,13 @@ public abstract class APasswordGenerationFragment extends Fragment {
      */
     private boolean settingsCollapsed = false;
 
+    /**
+     * the settings view
+     * @author Tobias Hess
+     * @since 15.08.2017
+     */
+    private View presetPasswordConfiguration;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,7 +192,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
 
         //create the ListView with the Configurations as header
         ListView listViewGeneratedPasswords = (ListView) view.findViewById(R.id.listView_generated_passwords);
-        View presetPasswordConfiguration = getActivity().getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration,
+        presetPasswordConfiguration = getActivity().getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration,
                 listViewGeneratedPasswords, false);
         listViewGeneratedPasswords.addHeaderView(presetPasswordConfiguration);
         listViewGeneratedPasswords.setAdapter(generatedPasswordsAdapter);
@@ -288,6 +305,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @author Tobias Hess
      * @since 19.07.2017
      */
+    @SuppressLint("SetTextI18n")
     private void refreshPasswordLengthTextView(){
         textViewPasswordLength.setText(Integer.toString(getPasswordLength()));
     }
@@ -298,6 +316,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @author Tobias Hess
      * @since 22.07.2017
      */
+    @SuppressLint("SetTextI18n")
     private void refreshNumberOfPasswordsTextView(){
         textViewNumberOfPasswords.setText(Integer.toString(getNumberOfPasswords()));
     }
@@ -352,11 +371,45 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @since 12.08.2017
      */
     protected void collapseSettingsCard(){
-        linearLayoutSettingsContent.setVisibility(View.GONE);
-        viewSettingsHeaderDivider.setVisibility(View.GONE);
         imageButtonToggleSettings.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
         imageButtonToggleSettings.setContentDescription(getString(R.string.content_description_collapse_settings));
         settingsCollapsed = true;
+
+        ValueAnimator anim = ValueAnimator.ofInt(linearLayoutSettingsContent.getHeight(), 0);
+        anim.addUpdateListener(valueAnimator -> {
+            int value = (Integer) valueAnimator.getAnimatedValue();
+            ViewGroup.LayoutParams layoutParams = linearLayoutSettingsContent.getLayoutParams();
+            layoutParams.height = value;
+            linearLayoutSettingsContent.setLayoutParams(layoutParams);
+        });
+        anim.setDuration(300);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                linearLayoutSettingsContent.setVisibility(View.GONE);
+                viewSettingsHeaderDivider.setVisibility(View.GONE);
+                ViewGroup.LayoutParams layoutParams = linearLayoutSettingsContent.getLayoutParams();
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                presetPasswordConfiguration.requestLayout();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        anim.start();
     }
 
     /**
@@ -370,6 +423,44 @@ public abstract class APasswordGenerationFragment extends Fragment {
         imageButtonToggleSettings.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
         imageButtonToggleSettings.setContentDescription(getString(R.string.content_description_expand_settings));
         settingsCollapsed = false;
+
+        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        linearLayoutSettingsContent.measure(widthSpec, heightSpec);
+
+        ValueAnimator anim = ValueAnimator.ofInt(0, linearLayoutSettingsContent.getMeasuredHeight());
+        anim.addUpdateListener(valueAnimator -> {
+            int value = (Integer) valueAnimator.getAnimatedValue();
+            ViewGroup.LayoutParams layoutParams = linearLayoutSettingsContent.getLayoutParams();
+            layoutParams.height = value;
+            linearLayoutSettingsContent.setLayoutParams(layoutParams);
+        });
+        anim.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                ViewGroup.LayoutParams layoutParams = linearLayoutSettingsContent.getLayoutParams();
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                presetPasswordConfiguration.requestLayout();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        anim.setDuration(300);
+        anim.setInterpolator(new AccelerateDecelerateInterpolator());
+        anim.start();
     }
 
     /**
