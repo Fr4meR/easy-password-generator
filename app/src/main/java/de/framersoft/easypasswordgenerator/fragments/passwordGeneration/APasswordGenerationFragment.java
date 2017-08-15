@@ -21,17 +21,11 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Transformation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -159,7 +153,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
     private View viewAdditionalSettings;
 
     /**
-     * is the settings cardview collapsed?
+     * is the settings CardView collapsed?
      * @author Tobias Hess
      * @since 12.08.2017
      */
@@ -175,7 +169,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //initialize the adapter for the password listview
+        //initialize the adapter for the password ListView
         generatedPasswordsAdapter = new GeneratedPasswordsAdapter(getActivity(), new ArrayList<>());
     }
 
@@ -311,8 +305,8 @@ public abstract class APasswordGenerationFragment extends Fragment {
     }
 
     /**
-     * sets the value of the seekbar for the number of passwords to generate
-     * to a textview so the user can see what he is choosing
+     * sets the value of the SeekBar for the number of passwords to generate
+     * to a TextView so the user can see what he is choosing
      * @author Tobias Hess
      * @since 22.07.2017
      */
@@ -338,7 +332,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
     }
 
     /**
-     * toggles the visibility of the content section of the settings cardview
+     * toggles the visibility of the content section of the settings CardView
      * @author Tobias Hess
      * @since 12.08.2017
      */
@@ -477,7 +471,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @author Tobias Hess
      * @since 13.08.2017
      * @return
-     *      the id of the layout ressource to add as additional settings
+     *      the id of the layout resource to add as additional settings
      */
     protected abstract int getAdditionalSettingsLayoutResource();
 
