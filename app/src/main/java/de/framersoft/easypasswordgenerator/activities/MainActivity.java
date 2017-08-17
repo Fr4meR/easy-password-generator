@@ -26,6 +26,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -53,6 +54,15 @@ import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.PresetPa
  */
 public class MainActivity extends AppCompatActivity
         implements HelpListFragment.OnHelpEntrySelectedListener{
+
+    /**
+     * tag for the root fragment in the back stack.
+     * This is used to find the root fragment in the BacksStack e.g. for popping
+     * everything in the BackStack.
+     * @author Tobias Hess
+     * @since 17.08.2017
+     */
+    private static final String BACK_STACK_ROOT_TAG = "root_fragment";
 
     /**
      * the drawer layout for the navigation
@@ -95,7 +105,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //initialize admob sdk
+        //initialize AdMob sdk
         MobileAds.initialize(this, getString(R.string.admob_app_id));
 
         if(getSupportActionBar() != null) {
@@ -174,7 +184,7 @@ public class MainActivity extends AppCompatActivity
         drawerToggle.syncState();
 
         //load the startup fragment (template password generation)
-        openTemplatePasswordGeneration(false);
+        openTemplatePasswordGeneration();
 
         loadAds();
     }
@@ -182,7 +192,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        renewAdmobSmartBanner();
+        renewAdMobSmartBanner();
     }
 
     @Override
@@ -196,7 +206,7 @@ public class MainActivity extends AppCompatActivity
     public void onHelpEntrySelected(HelpEntry entry) {
         HelpEntryFragment f = new HelpEntryFragment();
         f.setArguments(entry.toBundle());
-        startFragment(f, true);
+        startFragment(f, false);
     }
 
     @Override
@@ -212,6 +222,9 @@ public class MainActivity extends AppCompatActivity
         Fragment f = fm.findFragmentById(R.id.frameLayout_main_fragment);
         if(f instanceof PresetPasswordGenerationFragment){
             selectNavigationDrawerItem(R.id.nav_preset_password_generation);
+        }
+        else if(f instanceof CustomPasswordGeneration){
+            selectNavigationDrawerItem(R.id.nav_custom_password_generation);
         }
         else if(f instanceof HelpListFragment || f instanceof HelpEntryFragment){
             selectNavigationDrawerItem(R.id.nav_help);
@@ -229,22 +242,22 @@ public class MainActivity extends AppCompatActivity
      * @since 22.07.2017
      *
      */
-    private void renewAdmobSmartBanner(){
+    private void renewAdMobSmartBanner(){
         //create new adView
-        AdView newAdmobSmartBanner = new AdView(this);
-        newAdmobSmartBanner.setAdSize(AdSize.SMART_BANNER);
-        newAdmobSmartBanner.setAdUnitId(getString(R.string.admob_ad_id));
-        newAdmobSmartBanner.setId(R.id.adView_bottom_banner);
-        newAdmobSmartBanner.setLayoutParams(adViewBottomBanner.getLayoutParams());
+        AdView newAdMobSmartBanner = new AdView(this);
+        newAdMobSmartBanner.setAdSize(AdSize.SMART_BANNER);
+        newAdMobSmartBanner.setAdUnitId(getString(R.string.admob_ad_id));
+        newAdMobSmartBanner.setId(R.id.adView_bottom_banner);
+        newAdMobSmartBanner.setLayoutParams(adViewBottomBanner.getLayoutParams());
 
-        //remove old adview from layout
+        //remove old AdView from layout
         LinearLayout linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayout_main);
         linearLayoutMain.removeView(adViewBottomBanner);
 
         //add new adView into the layout
-        linearLayoutMain.addView(newAdmobSmartBanner);
+        linearLayoutMain.addView(newAdMobSmartBanner);
 
-        adViewBottomBanner = newAdmobSmartBanner;
+        adViewBottomBanner = newAdMobSmartBanner;
         adViewBottomBanner.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
@@ -279,17 +292,27 @@ public class MainActivity extends AppCompatActivity
      * @since 27.07.2017
      * @param f
      *      the Fragment to show
-     * @param useBackStack
-     *      add this transaction to the back stack?
+     * @param root
+     *      Is the Fragment f a root fragment? Meaning is f a Fragment that sits on Top-Level
+     *
      */
-    private void startFragment(Fragment f, boolean useBackStack){
+    private void startFragment(Fragment f, boolean root){
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.frameLayout_main_fragment, f);
-        if(useBackStack){
-            transaction.addToBackStack(null);
+        if(root){
+            fm.popBackStackImmediate(BACK_STACK_ROOT_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+        else{
+            if (fm.getBackStackEntryCount() == 0){
+                transaction.addToBackStack(BACK_STACK_ROOT_TAG);
+            }
+            else{
+                transaction.addToBackStack(null);
+            }
         }
         transaction.commit();
+        Log.d(this.getClass().getSimpleName(), "BackStackEntryCount: " + fm.getBackStackEntryCount());
     }
 
     /**
@@ -324,34 +347,11 @@ public class MainActivity extends AppCompatActivity
      * fragment container.
      * @author Tobias Hess
      * @since 27.07.2017
-     * @param useBackStack
-     *      add this transaction to the back stack?
-     */
-    private void openTemplatePasswordGeneration(boolean useBackStack){
-        Fragment f = new PresetPasswordGenerationFragment();
-        startFragment(f, useBackStack);
-        selectNavigationDrawerItem(R.id.nav_preset_password_generation);
-    }
-
-    /**
-     * Display the template password generation fragment in the main
-     * fragment container. Will add the transaction to the Fragment
-     * to the Back Stack!
-     * @author Tobias Hess
-     * @since 27.07.2017
      */
     private void openTemplatePasswordGeneration(){
-        openTemplatePasswordGeneration(true);
-    }
-
-    /**
-     * Display the custom password generation fragment in the main fragment
-     * container. Will add the transaction to the backstack!
-     * @author Tobias Hess
-     * @since 13.08.2017
-     */
-    private void openCustomPasswordGeneration(){
-        openCustomPasswordGeneration(true);
+        Fragment f = new PresetPasswordGenerationFragment();
+        startFragment(f, true);
+        selectNavigationDrawerItem(R.id.nav_preset_password_generation);
     }
 
     /**
@@ -359,12 +359,10 @@ public class MainActivity extends AppCompatActivity
      * container.
      * @author Tobias Hess
      * @since 13.08.2017
-     * @param useBackStack
-     *      add to the backstack?
      */
-    private void openCustomPasswordGeneration(boolean useBackStack){
+    private void openCustomPasswordGeneration(){
         Fragment f = new CustomPasswordGeneration();
-        startFragment(f, useBackStack);
+        startFragment(f, true);
         selectNavigationDrawerItem(R.id.nav_custom_password_generation);
     }
 
@@ -372,46 +370,22 @@ public class MainActivity extends AppCompatActivity
      * Display the info fragment in the main fragment container.
      * @author Tobias Hess
      * @since 27.07.2017
-     * @param useBackStack
-     *      add this transaction to the back stack?
      */
-    private void openInfo(boolean useBackStack){
+    private void openInfo(){
         Fragment f = new InfoFragment();
-        startFragment(f, useBackStack);
+        startFragment(f, true);
         selectNavigationDrawerItem(R.id.nav_about_us);
     }
 
     /**
-     * Display the info fragment in the main fragment container.
-     * Will add the transaction to the Fragment to the Back Stack!
-     * @author Tobias Hess
-     * @since 27.07.2017
-     */
-    private void openInfo(){
-        openInfo(true);
-    }
-
-    /**
      * Display the help fragment in the main fragment container.
-     * @author Tobias Hess
-     * @since 27.07.2017
-     * @param useBackStack
-     *      add this transaction to the back stack?
-     */
-    private void openHelp(boolean useBackStack){
-        Fragment f = new HelpListFragment();
-        startFragment(f, useBackStack);
-        selectNavigationDrawerItem(R.id.nav_help);
-    }
-
-    /**
-     * Display the help fragment in the main fragment container.
-     * Will add the transaction to the Fragment to the Back Stack!
      * @author Tobias Hess
      * @since 27.07.2017
      */
     private void openHelp(){
-        openHelp(true);
+        Fragment f = new HelpListFragment();
+        startFragment(f, true);
+        selectNavigationDrawerItem(R.id.nav_help);
     }
 
     /**
