@@ -15,8 +15,6 @@
  */
 package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
-import android.animation.Animator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,10 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -70,7 +65,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @author Tobias Hess
      * @since 25.07.2017
      */
-    private static final int DEFAULT_NUMBER_OF_PASSWORDS = 5;
+    private static final int DEFAULT_NUMBER_OF_PASSWORDS = 8;
 
     /**
      * the {@link TextView} of the title for the password length
@@ -125,46 +120,11 @@ public abstract class APasswordGenerationFragment extends Fragment {
     private GeneratedPasswordsAdapter generatedPasswordsAdapter;
 
     /**
-     * the {@link ImageButton} to toggle the settings for password generation with
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    private ImageButton imageButtonToggleSettings;
-
-    /**
-     * the {@link LinearLayout} that contains the settings for password generation
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    private LinearLayout linearLayoutSettingsContent;
-
-    /**
-     * the divider between the settings header and the content
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    private View viewSettingsHeaderDivider;
-
-    /**
      * the view containing the additional settings
      * @author Tobias Hess
      * @since 13.08.2017
      */
     private View viewAdditionalSettings;
-
-    /**
-     * is the settings CardView collapsed?
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    private boolean settingsCollapsed = false;
-
-    /**
-     * the settings view
-     * @author Tobias Hess
-     * @since 15.08.2017
-     */
-    private View presetPasswordConfiguration;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -186,18 +146,10 @@ public abstract class APasswordGenerationFragment extends Fragment {
 
         //create the ListView with the Configurations as header
         ListView listViewGeneratedPasswords = (ListView) view.findViewById(R.id.listView_generated_passwords);
-        presetPasswordConfiguration = getActivity().getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration,
+        View presetPasswordConfiguration = getActivity().getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration,
                 listViewGeneratedPasswords, false);
         listViewGeneratedPasswords.addHeaderView(presetPasswordConfiguration);
         listViewGeneratedPasswords.setAdapter(generatedPasswordsAdapter);
-
-        //create toggling for the header
-        imageButtonToggleSettings = (ImageButton) presetPasswordConfiguration.findViewById(R.id.imageButton_toggle_settings_collapse);
-        LinearLayout linearLayoutSettingsHeader = (LinearLayout) presetPasswordConfiguration.findViewById(R.id.linearLayout_settings_header);
-        linearLayoutSettingsContent = (LinearLayout) presetPasswordConfiguration.findViewById(R.id.constraintLayout_settings_content);
-        viewSettingsHeaderDivider = presetPasswordConfiguration.findViewById(R.id.view_PresetPasswordSettingsDividerHeader);
-        linearLayoutSettingsHeader.setOnClickListener(view1 -> toggleSettingsCard());
-        imageButtonToggleSettings.setOnClickListener(view1 -> toggleSettingsCard());
 
         //get GUI elements
         ViewStub viewStubAdditionalSettings = (ViewStub) presetPasswordConfiguration.findViewById(R.id.viewStub_additional_settings);
@@ -252,23 +204,11 @@ public abstract class APasswordGenerationFragment extends Fragment {
         //set the button listeners
         buttonGenerate.setOnClickListener(v -> {
             generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords());
-            collapseSettingsCard();
+            listViewGeneratedPasswords.smoothScrollToPositionFromTop(1, 16, 350);
         });
 
-        refreshNumberOfPasswordsTextView();
+        resetNumberOfPasswordsSeekBar();
         refreshPasswordLengthTextView();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(settingsCollapsed){
-            collapseSettingsCard();
-        }
-        else{
-            expandSettingsCard();
-        }
     }
 
     /**
@@ -332,20 +272,6 @@ public abstract class APasswordGenerationFragment extends Fragment {
     }
 
     /**
-     * toggles the visibility of the content section of the settings CardView
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    protected void toggleSettingsCard(){
-        if(settingsCollapsed){
-            expandSettingsCard();
-        }
-        else{
-            collapseSettingsCard();
-        }
-    }
-
-    /**
      * sets the minimal password length
      * @author Tobias Hess
      * @since 13.08.2017
@@ -357,104 +283,6 @@ public abstract class APasswordGenerationFragment extends Fragment {
         seekBarPasswordLength.setMax(MAX_PASSWORD_LENGTH - minPasswordLength);
         seekBarPasswordLength.setProgress(DEFAULT_PASSWORD_LENGTH - minPasswordLength);
         refreshPasswordLengthTextView();
-    }
-
-    /**
-     * collapses the settings card
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    protected void collapseSettingsCard(){
-        imageButtonToggleSettings.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-        imageButtonToggleSettings.setContentDescription(getString(R.string.content_description_collapse_settings));
-        settingsCollapsed = true;
-
-        ValueAnimator anim = ValueAnimator.ofInt(linearLayoutSettingsContent.getHeight(), 0);
-        anim.addUpdateListener(valueAnimator -> {
-            int value = (Integer) valueAnimator.getAnimatedValue();
-            ViewGroup.LayoutParams layoutParams = linearLayoutSettingsContent.getLayoutParams();
-            layoutParams.height = value;
-            linearLayoutSettingsContent.setLayoutParams(layoutParams);
-        });
-        anim.setDuration(300);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        anim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                linearLayoutSettingsContent.setVisibility(View.GONE);
-                viewSettingsHeaderDivider.setVisibility(View.GONE);
-                ViewGroup.LayoutParams layoutParams = linearLayoutSettingsContent.getLayoutParams();
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                presetPasswordConfiguration.requestLayout();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-        anim.start();
-    }
-
-    /**
-     * expands the settings card
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    protected void expandSettingsCard(){
-        linearLayoutSettingsContent.setVisibility(View.VISIBLE);
-        viewSettingsHeaderDivider.setVisibility(View.VISIBLE);
-        imageButtonToggleSettings.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
-        imageButtonToggleSettings.setContentDescription(getString(R.string.content_description_expand_settings));
-        settingsCollapsed = false;
-
-        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        linearLayoutSettingsContent.measure(widthSpec, heightSpec);
-
-        ValueAnimator anim = ValueAnimator.ofInt(0, linearLayoutSettingsContent.getMeasuredHeight());
-        anim.addUpdateListener(valueAnimator -> {
-            int value = (Integer) valueAnimator.getAnimatedValue();
-            ViewGroup.LayoutParams layoutParams = linearLayoutSettingsContent.getLayoutParams();
-            layoutParams.height = value;
-            linearLayoutSettingsContent.setLayoutParams(layoutParams);
-        });
-        anim.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                ViewGroup.LayoutParams layoutParams = linearLayoutSettingsContent.getLayoutParams();
-                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                presetPasswordConfiguration.requestLayout();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
-        anim.setDuration(300);
-        anim.setInterpolator(new AccelerateDecelerateInterpolator());
-        anim.start();
     }
 
     /**

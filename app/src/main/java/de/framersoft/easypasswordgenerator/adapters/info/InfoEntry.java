@@ -48,7 +48,7 @@ public class InfoEntry {
      * @author Tobias Hess
      * @since 12.08.2017
      */
-    private String header;
+    private final String header;
 
 
     /**
@@ -56,14 +56,14 @@ public class InfoEntry {
      * @author Tobias Hess
      * @since 12.08.2017
      */
-    private String content;
+    private final String content;
 
     /**
      * the type
      * @author Tobias Hess
      * @since 12.08.2017
      */
-    private int type;
+    private final int type;
 
     /**
      * constructor
