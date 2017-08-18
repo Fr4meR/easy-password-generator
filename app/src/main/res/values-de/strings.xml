@@ -203,7 +203,7 @@
     <string name="custom_password_section_length">Länge</string>
     <string name="custom_password_settings_special_characters">Sonderzeichen</string>
     <string name="custom_password_settings_title_leading_characters">Führende Zeichen</string>
-    <string name="custom_password_settings_title_main">Hauptzeichen</string>
+    <string name="custom_password_settings_title_main">Zeichen</string>
     <string name="custom_password_speaking_password">Sprechendes Passwort</string>
     <string name="custom_password_at_least_one_checkbox">Es muss mindestens eine Checkbox aktiv sein.</string>
     <string name="custom_password_avoid_similar_characters">Ähnliche Zeichen vermeiden</string>

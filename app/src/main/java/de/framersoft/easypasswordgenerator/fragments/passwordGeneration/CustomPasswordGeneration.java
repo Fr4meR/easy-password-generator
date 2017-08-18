@@ -20,10 +20,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +49,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     /*
      * GUI elements for the prefix settings
      */
+    private Switch switchPrefixEnabled;
+    private LinearLayout linearLayoutPrefixSettings;
     private CheckBox checkBoxPrefixAToZUpperCase;
     private CheckBox checkBoxPrefixAToZLowerCase;
     private CheckBox checkBoxPrefix0To9;
@@ -62,6 +69,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     /*
      * GUI elements for the postfix settings
      */
+    private Switch switchPostfixEnabled;
+    private LinearLayout linearLayoutPostfixSettings;
     private CheckBox checkBoxPostfixAToZUpperCase;
     private CheckBox checkBoxPostfixAToZLowerCase;
     private CheckBox checkBoxPostfix0To9;
@@ -82,6 +91,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         View additionalSettings = getViewAdditionalSettings();
 
         //get GUI elements
+        switchPrefixEnabled = (Switch) additionalSettings.findViewById(R.id.switch_prefix_enabled);
+        linearLayoutPrefixSettings = (LinearLayout) additionalSettings.findViewById(R.id.linearLayout_prefix_settings);
         checkBoxPrefixAToZUpperCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_A_to_Z);
         checkBoxPrefixAToZLowerCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_a_to_z);
         checkBoxPrefix0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_0_to_9);
@@ -95,6 +106,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         checkBox0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_0_to_9);
         checkBoxSpecialCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_special_characters);
 
+        switchPostfixEnabled = (Switch) additionalSettings.findViewById(R.id.switch_postfix_enabled);
+        linearLayoutPostfixSettings = (LinearLayout) additionalSettings.findViewById(R.id.linearLayout_postfix_settings);
         checkBoxPostfixAToZUpperCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_A_to_Z);
         checkBoxPostfixAToZLowerCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_a_to_z);
         checkBoxPostfix0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_0_to_9);
@@ -104,6 +117,9 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
 
         checkBoxSpeakingPassword = (CheckBox) additionalSettings.findViewById(R.id.checkBox_speaking_password);
         checkBoxAvoidSimilarCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_avoid_similar_characters);
+
+        //initializes the Switches to turn on / off pre-/postfix settings
+        initSwitches();
 
         //initializes the SeekBars by adding listeners / settings the
         //textview that displays the value
@@ -127,17 +143,19 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     protected PasswordGenerator createPasswordGenerator() {
         //prefix options
         String alphabet_prefix = "";
-        if(checkBoxPrefixAToZUpperCase.isChecked()){
-            alphabet_prefix += AlphabetConstants.ALPHABET_A_TO_Z_UPPERCASE;
-        }
-        if(checkBoxPrefixAToZLowerCase.isChecked()){
-            alphabet_prefix += AlphabetConstants.ALPHABET_A_TO_Z_LOWERCASE;
-        }
-        if(checkBoxPrefix0To9.isChecked()){
-            alphabet_prefix += AlphabetConstants.ALPHABET_NUMBERS;
-        }
-        if(checkBoxPrefixSpecialCharacters.isChecked()){
-            alphabet_prefix += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS + AlphabetConstants.ALPHABET_PUNCTUATION;
+        if(switchPrefixEnabled.isChecked()) {
+            if (checkBoxPrefixAToZUpperCase.isChecked()) {
+                alphabet_prefix += AlphabetConstants.ALPHABET_A_TO_Z_UPPERCASE;
+            }
+            if (checkBoxPrefixAToZLowerCase.isChecked()) {
+                alphabet_prefix += AlphabetConstants.ALPHABET_A_TO_Z_LOWERCASE;
+            }
+            if (checkBoxPrefix0To9.isChecked()) {
+                alphabet_prefix += AlphabetConstants.ALPHABET_NUMBERS;
+            }
+            if (checkBoxPrefixSpecialCharacters.isChecked()) {
+                alphabet_prefix += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS + AlphabetConstants.ALPHABET_PUNCTUATION;
+            }
         }
 
         //main options
@@ -157,17 +175,26 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
 
         //postfix options
         String alphabet_postfix = "";
-        if(checkBoxPostfixAToZUpperCase.isChecked()){
-            alphabet_postfix += AlphabetConstants.ALPHABET_A_TO_Z_UPPERCASE;
+        if(switchPostfixEnabled.isChecked()) {
+            if (checkBoxPostfixAToZUpperCase.isChecked()) {
+                alphabet_postfix += AlphabetConstants.ALPHABET_A_TO_Z_UPPERCASE;
+            }
+            if (checkBoxPostfixAToZLowerCase.isChecked()) {
+                alphabet_postfix += AlphabetConstants.ALPHABET_A_TO_Z_LOWERCASE;
+            }
+            if (checkBoxPostfix0To9.isChecked()) {
+                alphabet_postfix += AlphabetConstants.ALPHABET_NUMBERS;
+            }
+            if (checkBoxPostfixSpecialCharacters.isChecked()) {
+                alphabet_postfix += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS + AlphabetConstants.ALPHABET_PUNCTUATION;
+            }
         }
-        if(checkBoxPostfixAToZLowerCase.isChecked()){
-            alphabet_postfix += AlphabetConstants.ALPHABET_A_TO_Z_LOWERCASE;
-        }
-        if(checkBoxPostfix0To9.isChecked()){
-            alphabet_postfix += AlphabetConstants.ALPHABET_NUMBERS;
-        }
-        if(checkBoxPostfixSpecialCharacters.isChecked()){
-            alphabet_postfix += AlphabetConstants.ALPHABET_SPECIAL_CHARACTERS + AlphabetConstants.ALPHABET_PUNCTUATION;
+
+        //remove characters that are hard to speak
+        if(checkBoxSpeakingPassword.isChecked()){
+            alphabet_prefix = alphabet_prefix.replaceAll("[CQXYcqxy]", "");
+            alphabet_main = alphabet_main.replaceAll("[CQXYcqxy]", "");
+            alphabet_postfix = alphabet_postfix.replaceAll("[CQXYcqxy]", "");
         }
 
         //avoid similar characters?
@@ -194,6 +221,16 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     @Override
     protected int getAdditionalSettingsLayoutResource() {
         return R.layout.additional_settings_custom_password_generation;
+    }
+
+    /**
+     * initializes the switches to turn on / off the prefix / postfix settings.
+     * @author Tobias Hess
+     * @since 18.08.2017
+     */
+    private void initSwitches(){
+        switchPrefixEnabled.setOnCheckedChangeListener((compoundButton, checked) -> togglePrePostfixSettings(linearLayoutPrefixSettings, checked));
+        switchPostfixEnabled.setOnCheckedChangeListener((compoundButton, checked) -> togglePrePostfixSettings(linearLayoutPostfixSettings, checked));
     }
 
     /**
@@ -394,5 +431,64 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
      */
     private int getPostfixLength(){
         return seekBarPostfixLength.getProgress();
+    }
+
+    /**
+     * is used to toggle the visibility state of the linear layouts that contain
+     * the settings for the prefix / postfix.
+     * @author Tobias Hess
+     * @since 18.08.2017
+     * @param view
+     *      the linear layout to toggle the visibility for
+     * @param show
+     *      if set to true the linear layout will be displayed, if set to false
+     *      the linear layout will be removed.
+     */
+    private void togglePrePostfixSettings(LinearLayout view, boolean show){
+        Animation anim;
+
+        if(show){
+            anim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    //nothing to do
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    //nothing to do
+                }
+            });
+        }
+        else{
+            anim = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    //nothing to do
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    view.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    //nothing to do
+                }
+            });
+        }
+
+        anim.setInterpolator(getActivity(), android.R.anim.accelerate_interpolator);
+        anim.setDuration(300);
+
+        view.startAnimation(anim);
     }
 }

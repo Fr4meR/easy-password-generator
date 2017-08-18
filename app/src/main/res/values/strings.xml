@@ -21,7 +21,7 @@
     <string name="password_type_wpa2">WPA2-Keys</string>
 
     <string name="custom_password_settings_title_leading_characters">Leading Characters</string>
-    <string name="custom_password_settings_title_main">Main Characters</string>
+    <string name="custom_password_settings_title_main">Characters</string>
     <string name="custom_password_Settings_title_trailing_characters">Trailing Characters</string>
     <string name="custom_password_settings_A_to_Z" translatable="false">A - Z</string>
     <string name="custom_password_settings_a_to_z" translatable="false">a - z</string>
