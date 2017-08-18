@@ -312,7 +312,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
         transaction.commit();
-        Log.d(this.getClass().getSimpleName(), "BackStackEntryCount: " + fm.getBackStackEntryCount());
     }
 
     /**
