@@ -2,8 +2,6 @@
 <resources>
     <string name="app_name">Easy Password Generator</string>
 
-    <string name="preset_password_generation_card_title">Einstellungen</string>
-
     <string name="activity_preset_password_generation_title">Vorlagen-Passwörter</string>
     <string name="activity_preset_password_generation_password_type">Art des Passworts</string>
     <string name="activity_preset_password_generation_password_length">Länge des Passworts</string>
@@ -199,15 +197,13 @@
     <string name="rate_dialog_ok">Bewerten</string>
     <string name="rate_dialog_cancel">Später</string>
     <string name="rate_dialog_no">Niemals</string>
-    <string name="content_description_collapse_settings">Einstellungen zuklappen</string>
-    <string name="content_description_expand_settings">Einstellungen aufklappen</string>
     <string name="nav_item_title_custom_password_generation">Benutzerd. Passwörter</string>
     <string name="activity_custom_password_generation_title">Benutzerd. Passwörter</string>
     <string name="custom_password_Settings_title_trailing_characters">Folgende Zeichen</string>
     <string name="custom_password_section_length">Länge</string>
     <string name="custom_password_settings_special_characters">Sonderzeichen</string>
     <string name="custom_password_settings_title_leading_characters">Führende Zeichen</string>
-    <string name="custom_password_settings_title_main">Hauptzeichen</string>
+    <string name="custom_password_settings_title_main">Zeichen</string>
     <string name="custom_password_speaking_password">Sprechendes Passwort</string>
     <string name="custom_password_at_least_one_checkbox">Es muss mindestens eine Checkbox aktiv sein.</string>
     <string name="custom_password_avoid_similar_characters">Ähnliche Zeichen vermeiden</string>

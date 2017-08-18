@@ -15,6 +15,7 @@
  */
 package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,8 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -66,7 +65,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @author Tobias Hess
      * @since 25.07.2017
      */
-    private static final int DEFAULT_NUMBER_OF_PASSWORDS = 5;
+    private static final int DEFAULT_NUMBER_OF_PASSWORDS = 8;
 
     /**
      * the {@link TextView} of the title for the password length
@@ -121,44 +120,16 @@ public abstract class APasswordGenerationFragment extends Fragment {
     private GeneratedPasswordsAdapter generatedPasswordsAdapter;
 
     /**
-     * the {@link ImageButton} to toggle the settings for password generation with
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    private ImageButton imageButtonToggleSettings;
-
-    /**
-     * the {@link LinearLayout} that contains the settings for password generation
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    private LinearLayout linearLayoutSettingsContent;
-
-    /**
-     * the divider between the settings header and the content
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    private View viewSettingsHeaderDivider;
-
-    /**
      * the view containing the additional settings
      * @author Tobias Hess
      * @since 13.08.2017
      */
     private View viewAdditionalSettings;
 
-    /**
-     * is the settings cardview collapsed?
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    private boolean settingsCollapsed = false;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //initialize the adapter for the password listview
+        //initialize the adapter for the password ListView
         generatedPasswordsAdapter = new GeneratedPasswordsAdapter(getActivity(), new ArrayList<>());
     }
 
@@ -179,14 +150,6 @@ public abstract class APasswordGenerationFragment extends Fragment {
                 listViewGeneratedPasswords, false);
         listViewGeneratedPasswords.addHeaderView(presetPasswordConfiguration);
         listViewGeneratedPasswords.setAdapter(generatedPasswordsAdapter);
-
-        //create toggling for the header
-        imageButtonToggleSettings = (ImageButton) presetPasswordConfiguration.findViewById(R.id.imageButton_toggle_settings_collapse);
-        LinearLayout linearLayoutSettingsHeader = (LinearLayout) presetPasswordConfiguration.findViewById(R.id.linearLayout_settings_header);
-        linearLayoutSettingsContent = (LinearLayout) presetPasswordConfiguration.findViewById(R.id.constraintLayout_settings_content);
-        viewSettingsHeaderDivider = presetPasswordConfiguration.findViewById(R.id.view_PresetPasswordSettingsDividerHeader);
-        linearLayoutSettingsHeader.setOnClickListener(view1 -> toggleSettingsCard());
-        imageButtonToggleSettings.setOnClickListener(view1 -> toggleSettingsCard());
 
         //get GUI elements
         ViewStub viewStubAdditionalSettings = (ViewStub) presetPasswordConfiguration.findViewById(R.id.viewStub_additional_settings);
@@ -241,23 +204,11 @@ public abstract class APasswordGenerationFragment extends Fragment {
         //set the button listeners
         buttonGenerate.setOnClickListener(v -> {
             generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords());
-            collapseSettingsCard();
+            listViewGeneratedPasswords.smoothScrollToPositionFromTop(1, 16, 350);
         });
 
-        refreshNumberOfPasswordsTextView();
+        resetNumberOfPasswordsSeekBar();
         refreshPasswordLengthTextView();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(settingsCollapsed){
-            collapseSettingsCard();
-        }
-        else{
-            expandSettingsCard();
-        }
     }
 
     /**
@@ -288,16 +239,18 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @author Tobias Hess
      * @since 19.07.2017
      */
+    @SuppressLint("SetTextI18n")
     private void refreshPasswordLengthTextView(){
         textViewPasswordLength.setText(Integer.toString(getPasswordLength()));
     }
 
     /**
-     * sets the value of the seekbar for the number of passwords to generate
-     * to a textview so the user can see what he is choosing
+     * sets the value of the SeekBar for the number of passwords to generate
+     * to a TextView so the user can see what he is choosing
      * @author Tobias Hess
      * @since 22.07.2017
      */
+    @SuppressLint("SetTextI18n")
     private void refreshNumberOfPasswordsTextView(){
         textViewNumberOfPasswords.setText(Integer.toString(getNumberOfPasswords()));
     }
@@ -319,20 +272,6 @@ public abstract class APasswordGenerationFragment extends Fragment {
     }
 
     /**
-     * toggles the visibility of the content section of the settings cardview
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    protected void toggleSettingsCard(){
-        if(settingsCollapsed){
-            expandSettingsCard();
-        }
-        else{
-            collapseSettingsCard();
-        }
-    }
-
-    /**
      * sets the minimal password length
      * @author Tobias Hess
      * @since 13.08.2017
@@ -344,32 +283,6 @@ public abstract class APasswordGenerationFragment extends Fragment {
         seekBarPasswordLength.setMax(MAX_PASSWORD_LENGTH - minPasswordLength);
         seekBarPasswordLength.setProgress(DEFAULT_PASSWORD_LENGTH - minPasswordLength);
         refreshPasswordLengthTextView();
-    }
-
-    /**
-     * collapses the settings card
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    protected void collapseSettingsCard(){
-        linearLayoutSettingsContent.setVisibility(View.GONE);
-        viewSettingsHeaderDivider.setVisibility(View.GONE);
-        imageButtonToggleSettings.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-        imageButtonToggleSettings.setContentDescription(getString(R.string.content_description_collapse_settings));
-        settingsCollapsed = true;
-    }
-
-    /**
-     * expands the settings card
-     * @author Tobias Hess
-     * @since 12.08.2017
-     */
-    protected void expandSettingsCard(){
-        linearLayoutSettingsContent.setVisibility(View.VISIBLE);
-        viewSettingsHeaderDivider.setVisibility(View.VISIBLE);
-        imageButtonToggleSettings.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
-        imageButtonToggleSettings.setContentDescription(getString(R.string.content_description_expand_settings));
-        settingsCollapsed = false;
     }
 
     /**
@@ -386,7 +299,7 @@ public abstract class APasswordGenerationFragment extends Fragment {
      * @author Tobias Hess
      * @since 13.08.2017
      * @return
-     *      the id of the layout ressource to add as additional settings
+     *      the id of the layout resource to add as additional settings
      */
     protected abstract int getAdditionalSettingsLayoutResource();
 
