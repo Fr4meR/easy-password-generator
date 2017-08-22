@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -122,7 +121,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         initSwitches();
 
         //initializes the SeekBars by adding listeners / settings the
-        //textview that displays the value
+        //TextView that displays the value
         initSeekBars();
 
         //initializes the CheckBoxes by adding listeners
@@ -229,8 +228,14 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
      * @since 18.08.2017
      */
     private void initSwitches(){
-        switchPrefixEnabled.setOnCheckedChangeListener((compoundButton, checked) -> togglePrePostfixSettings(linearLayoutPrefixSettings, checked));
-        switchPostfixEnabled.setOnCheckedChangeListener((compoundButton, checked) -> togglePrePostfixSettings(linearLayoutPostfixSettings, checked));
+        switchPrefixEnabled.setOnCheckedChangeListener((compoundButton, checked) -> {
+            togglePrePostfixSettings(linearLayoutPrefixSettings, checked);
+            checkSpeakingPasswordPossible();
+        });
+        switchPostfixEnabled.setOnCheckedChangeListener((compoundButton, checked) -> {
+            togglePrePostfixSettings(linearLayoutPostfixSettings, checked);
+            checkSpeakingPasswordPossible();
+        });
     }
 
     /**
@@ -294,7 +299,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     }
 
     /**
-     * checks if a spaking password is possible and sets the state of the corresponding CheckBox
+     * checks if a speaking password is possible and sets the state of the corresponding CheckBox
      * accordingly. A speaking password is possible if at least one section of the password
      * contains only of letters.
      * @author Tobias Hess
@@ -306,7 +311,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         boolean speakingPasswordPossible = false;
 
         //check prefix section
-        if(seekBarPrefixLength.getProgress() > 0 && (checkBoxPrefixAToZUpperCase.isChecked() || checkBoxPrefixAToZLowerCase.isChecked()) &&
+        if(switchPrefixEnabled.isChecked() && seekBarPrefixLength.getProgress() > 0 &&
+                (checkBoxPrefixAToZUpperCase.isChecked() || checkBoxPrefixAToZLowerCase.isChecked()) &&
                 !checkBoxPrefix0To9.isChecked() && !checkBoxPrefixSpecialCharacters.isChecked()){
 
             speakingPasswordPossible = true;
@@ -320,7 +326,8 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         }
 
         //check postfix section
-        if(seekBarPostfixLength.getProgress() > 0 && (checkBoxPostfixAToZUpperCase.isChecked() || checkBoxPostfixAToZLowerCase.isChecked()) &&
+        if(switchPostfixEnabled.isChecked() && seekBarPostfixLength.getProgress() > 0 &&
+                (checkBoxPostfixAToZUpperCase.isChecked() || checkBoxPostfixAToZLowerCase.isChecked()) &&
                 !checkBoxPostfix0To9.isChecked() && !checkBoxPostfixSpecialCharacters.isChecked()){
 
             speakingPasswordPossible = true;
@@ -341,7 +348,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
      * @since 13.08.2017
      */
     private void initSeekBars(){
-        //initialize the prefix length seekbars
+        //initialize the prefix length SeekBars
         seekBarPrefixLength.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -365,7 +372,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         });
         refreshPrefixLengthSeekBar();
 
-        //initialize the postfix length seekbar
+        //initialize the postfix length SeekBar
         seekBarPostfixLength.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -394,7 +401,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     }
 
     /**
-     * refreshes the textview for the prefix length seekbar
+     * refreshes the TextView for the prefix length SeekBar
      * @author Tobias Hess
      * @since 13.08.2017
      */
@@ -404,7 +411,7 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     }
 
     /**
-     * refreshes the textview for the postfix length seekbar
+     * refreshes the TextView for the postfix length SeekBar
      * @author Tobias Hess
      * @since 13.08.2017
      */
