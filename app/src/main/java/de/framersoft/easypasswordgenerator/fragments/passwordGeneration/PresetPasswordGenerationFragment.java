@@ -123,7 +123,7 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
                 break;
             case PASSWORD_MODE_COMPLEX_PASSWORDS:
                 setPasswordLengthVisibility(View.VISIBLE);
-                setMinPasswordLength(3);
+                setMinPasswordLength(4);
                 break;
             case PASSWORD_MODE_WPE_KEY_64:
             case PASSWORD_MODE_WPE_KEY_128:
