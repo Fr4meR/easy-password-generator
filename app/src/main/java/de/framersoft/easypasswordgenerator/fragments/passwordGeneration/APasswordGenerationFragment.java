@@ -16,6 +16,8 @@
 package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -207,8 +209,18 @@ public abstract class APasswordGenerationFragment extends Fragment {
             listViewGeneratedPasswords.smoothScrollToPositionFromTop(1, 16, 350);
         });
 
-        resetNumberOfPasswordsSeekBar();
-        refreshPasswordLengthTextView();
+        loadSettings();
+        loadAdditionalSettings();
+        //TODO resetNumberOfPasswordsSeekBar();
+        //TODO refreshPasswordLengthTextView();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        saveSettings();
+        saveAddtitionalSettings();
     }
 
     /**
@@ -332,4 +344,56 @@ public abstract class APasswordGenerationFragment extends Fragment {
     protected View getViewAdditionalSettings(){
         return viewAdditionalSettings;
     }
+
+    /**
+     * Saves the selected settings in the {@link android.content.SharedPreferences}
+     * @author Tobias Hess
+     * @since 06.02.2018
+     */
+    private void saveSettings(){
+        SharedPreferences prefs = getActivity().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putInt("password_length", seekBarPasswordLength.getProgress());
+        editor.putInt("number_of_passwords", seekBarNumberOfPasswords.getProgress());
+
+        editor.apply();
+    }
+
+    /**
+     * Loads the previously saved settings from the {@link android.content.SharedPreferences}
+     * @author Tobias Hess
+     * @since 06.02.2018
+     */
+    private void loadSettings(){
+        SharedPreferences prefs = getActivity().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
+
+        int passwordLength = prefs.getInt("password_length", DEFAULT_PASSWORD_LENGTH);
+        seekBarPasswordLength.setProgress(passwordLength);
+
+        int numberOfPasswords = prefs.getInt("number_of_passwords", DEFAULT_NUMBER_OF_PASSWORDS);
+        seekBarNumberOfPasswords.setProgress(numberOfPasswords);
+    }
+
+    /**
+     * Saves the selected additional settings in the {@link android.content.SharedPreferences}
+     * @author Tobias Hess
+     * @since 06.02.2018
+     */
+    protected abstract void saveAddtitionalSettings();
+
+    /**
+     * Loads the previously saved additional settings from the {@link android.content.SharedPreferences}
+     * @author Tobias Hess
+     * @since 06.02.2018
+     */
+    protected abstract void loadAdditionalSettings();
+
+    /**
+     * @author Tobias Hess
+     * @since 06.02.2018
+     * @return
+     *      the file name of the shared preferences for the fragments settings
+     */
+    protected abstract String getSettingsSharedPreferencesFileName();
 }
