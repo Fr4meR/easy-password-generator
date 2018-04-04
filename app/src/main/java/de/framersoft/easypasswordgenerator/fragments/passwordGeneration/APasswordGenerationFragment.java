@@ -176,7 +176,6 @@ public abstract class APasswordGenerationFragment extends Fragment {
         seekBarPasswordLength.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d(getClass().getSimpleName(), "password length changed to" + progress);
                 refreshPasswordLengthTextView();
             }
 
@@ -194,7 +193,6 @@ public abstract class APasswordGenerationFragment extends Fragment {
         seekBarNumberOfPasswords.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Log.d(getClass().getSimpleName(), "number of passwords changed to " + i);
                 refreshNumberOfPasswordsTextView();
             }
 
@@ -214,11 +212,14 @@ public abstract class APasswordGenerationFragment extends Fragment {
             generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords());
             listViewGeneratedPasswords.smoothScrollToPositionFromTop(1, 16, 350);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         loadSettings();
         loadAdditionalSettings();
-        //TODO resetNumberOfPasswordsSeekBar();
-        //TODO refreshPasswordLengthTextView();
     }
 
     @Override
@@ -297,9 +298,15 @@ public abstract class APasswordGenerationFragment extends Fragment {
      *      the minimal password length to set
      */
     protected void setMinPasswordLength(int minPasswordLength){
+        int newProgress = seekBarPasswordLength.getProgress() + this.minPasswordLength - minPasswordLength;
+        if(newProgress < 0){
+            newProgress = 0;
+        }
         this.minPasswordLength = minPasswordLength;
+
         seekBarPasswordLength.setMax(MAX_PASSWORD_LENGTH - minPasswordLength);
-        seekBarPasswordLength.setProgress(DEFAULT_PASSWORD_LENGTH - minPasswordLength);
+        seekBarPasswordLength.setProgress(newProgress);
+
         refreshPasswordLengthTextView();
     }
 
@@ -361,12 +368,10 @@ public abstract class APasswordGenerationFragment extends Fragment {
             SharedPreferences prefs = getContext().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
 
-            editor.putInt(getString(R.string.shared_pref_key_general_password_length), seekBarPasswordLength.getProgress());
-            editor.putInt(getString(R.string.shared_pref_key_general_number_of_passwords), seekBarNumberOfPasswords.getProgress());
+            editor.putInt(getString(R.string.shared_pref_key_general_password_length), getPasswordLength());
+            editor.putInt(getString(R.string.shared_pref_key_general_number_of_passwords), getNumberOfPasswords());
 
             editor.apply();
-
-            Log.d(getClass().getSimpleName(), "General settings saved (" + seekBarPasswordLength.getProgress() + ", " + seekBarNumberOfPasswords.getProgress() + ")");
         }
     }
 
@@ -380,12 +385,10 @@ public abstract class APasswordGenerationFragment extends Fragment {
             SharedPreferences prefs = getContext().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
 
             int passwordLength = prefs.getInt(getString(R.string.shared_pref_key_general_password_length), DEFAULT_PASSWORD_LENGTH);
-            seekBarPasswordLength.setProgress(passwordLength);
+            seekBarPasswordLength.setProgress(passwordLength - minPasswordLength);
 
             int numberOfPasswords = prefs.getInt(getString(R.string.shared_pref_key_general_number_of_passwords), DEFAULT_NUMBER_OF_PASSWORDS);
-            seekBarNumberOfPasswords.setProgress(numberOfPasswords);
-
-            Log.d(getClass().getSimpleName(), "General settings loaded (" + passwordLength + ", " + numberOfPasswords + ")");
+            seekBarNumberOfPasswords.setProgress(numberOfPasswords - 1);
         }
     }
 

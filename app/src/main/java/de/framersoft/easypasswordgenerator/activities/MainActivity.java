@@ -42,7 +42,7 @@ import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
 import de.framersoft.easypasswordgenerator.fragments.info.InfoFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpEntryFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment;
-import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.CustomPasswordGeneration;
+import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.CustomPasswordGenerationFragment;
 import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.PresetPasswordGenerationFragment;
 
 /**
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
         if(f instanceof PresetPasswordGenerationFragment){
             selectNavigationDrawerItem(R.id.nav_preset_password_generation);
         }
-        else if(f instanceof CustomPasswordGeneration){
+        else if(f instanceof CustomPasswordGenerationFragment){
             selectNavigationDrawerItem(R.id.nav_custom_password_generation);
         }
         else if(f instanceof HelpListFragment || f instanceof HelpEntryFragment){
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity
      * @since 13.08.2017
      */
     private void openCustomPasswordGeneration(){
-        Fragment f = new CustomPasswordGeneration();
+        Fragment f = new CustomPasswordGenerationFragment();
         startFragment(f, true);
         selectNavigationDrawerItem(R.id.nav_custom_password_generation);
     }
