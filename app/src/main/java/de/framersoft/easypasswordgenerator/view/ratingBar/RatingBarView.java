@@ -124,7 +124,7 @@ public class RatingBarView extends View {
         final int padding = (int) Math.ceil(w / 100D * 10);
 
         //spacing between bars
-        final int barSpacing = (int) (Math.ceil(h / 100D)  * 5);
+        final int barSpacing = (int) (Math.ceil(h / 100D)  * 2);
 
         //calculate the height of a single bar
         final int barHeight = (int)(Math.ceil((h - 4 * barSpacing) / 3D));
