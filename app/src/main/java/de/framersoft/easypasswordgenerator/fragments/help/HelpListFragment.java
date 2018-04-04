@@ -18,6 +18,7 @@ package de.framersoft.easypasswordgenerator.fragments.help;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -62,7 +63,7 @@ public class HelpListFragment extends Fragment {
     }
 
     /**
-     * contains the ressource ids of the header mapped to a list of entries for the header
+     * contains the resource ids of the header mapped to a list of entries for the header
      * @author Tobias Hess
      * @since 08.08.2017
      */
@@ -88,7 +89,7 @@ public class HelpListFragment extends Fragment {
         entriesTemplatePasswords.add(new HelpEntry(R.string.help_templates_wpa2_keys,
                 R.string.help_content_templates_wpa2_keys));
 
-        //add to the treemap
+        //add to the tree-map
         helpListData.put(R.string.help_header_menu_items, entriesMenuItems);
         helpListData.put(R.string.help_header_templates, entriesTemplatePasswords);
     }
@@ -113,7 +114,7 @@ public class HelpListFragment extends Fragment {
             callbackOnHelpEntrySelected = (OnHelpEntrySelectedListener) getActivity();
         }
         catch(ClassCastException e){
-            throw new ClassCastException(getActivity().toString() + " must implement " +
+            throw new ClassCastException(context.toString() + " must implement " +
                     "OnHelpEntrySelectedListener");
         }
     }
@@ -122,46 +123,50 @@ public class HelpListFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle(getString(R.string.fragment_title_help));
+        if(getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(getString(R.string.fragment_title_help));
+            }
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_help_list, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ListView listViewHelp = (ListView) view.findViewById(R.id.listView_help);
+        ListView listViewHelp = view.findViewById(R.id.listView_help);
 
         //create help adapter and fill with data
-        HelpAdapter helpAdapter = new HelpAdapter(getActivity());
-        for(Map.Entry<Integer, ArrayList<HelpEntry>> entry : helpListData.entrySet()){
-            int headerRessource = entry.getKey();
-            ArrayList<HelpEntry> helpEntries = entry.getValue();
+        if(getContext() != null) {
+            HelpAdapter helpAdapter = new HelpAdapter(getContext());
+            for (Map.Entry<Integer, ArrayList<HelpEntry>> entry : helpListData.entrySet()) {
+                int headerResource = entry.getKey();
+                ArrayList<HelpEntry> helpEntries = entry.getValue();
 
-            //add the header
-            helpAdapter.addHeader(getString(headerRessource));
+                //add the header
+                helpAdapter.addHeader(getString(headerResource));
 
-            //add the entries
-            for(HelpEntry helpEntry : helpEntries){
-                helpAdapter.addItem(helpEntry);
+                //add the entries
+                for (HelpEntry helpEntry : helpEntries) {
+                    helpAdapter.addItem(helpEntry);
+                }
             }
+
+            listViewHelp.setAdapter(helpAdapter);
+            listViewHelp.setOnItemClickListener((parent, view1, position, id) -> {
+                HelpEntry entry = (HelpEntry) view1.getTag();
+                if (entry != null) {
+                    callbackOnHelpEntrySelected.onHelpEntrySelected(entry);
+                }
+            });
         }
-
-        listViewHelp.setAdapter(helpAdapter);
-        listViewHelp.setOnItemClickListener((parent, view1, position, id) -> {
-            HelpEntry entry = (HelpEntry) view1.getTag();
-            if(entry != null){
-                callbackOnHelpEntrySelected.onHelpEntrySelected(entry);
-            }
-        });
     }
 }

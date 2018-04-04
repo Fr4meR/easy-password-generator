@@ -18,6 +18,7 @@ package de.framersoft.easypasswordgenerator.fragments.help;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -62,14 +63,16 @@ public class HelpEntryFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle(getString(textTitle));
+        if(getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(getString(textTitle));
+            }
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         Bundle args = getArguments();
@@ -84,10 +87,10 @@ public class HelpEntryFragment extends Fragment {
 
     @Override
     @SuppressWarnings("deprecation")
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView textViewContent = (TextView) view.findViewById(R.id.textView_help_content);
+        TextView textViewContent = view.findViewById(R.id.textView_help_content);
 
         //receive the html styled text
         Spanned spannedContent;

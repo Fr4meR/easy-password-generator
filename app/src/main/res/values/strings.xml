@@ -221,5 +221,13 @@
     <string name="rate_dialog_cancel">Later</string>
     <string name="rate_dialog_no">Never</string>
 
+    <!-- shared pref file names -->
+    <string name="shared_pref_file_custom_password">de.framersoft.easypasswordgenerator.custom_password_generation</string>
+    <string name="shared_pref_file_preset_password">de.framersoft.easypasswordgenerator.preset_password_generation</string>
+
+    <!-- shared pref file keys -->
+    <string name="shared_pref_key_general_password_length">password_length</string>
+    <string name="shared_pref_key_general_number_of_passwords">number_of_passwords</string>
+
 </resources>
 

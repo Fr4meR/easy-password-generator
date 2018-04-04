@@ -23,7 +23,7 @@ package de.framersoft.easypasswordgenerator.adapters.info;
 public class InfoEntry {
 
     /**
-     * entry content type: simpel text
+     * entry content type: simple text
      * @author Tobias Hess
      * @since 12.08.2017
      */

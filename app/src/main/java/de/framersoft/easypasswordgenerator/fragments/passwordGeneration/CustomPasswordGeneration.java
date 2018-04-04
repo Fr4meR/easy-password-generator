@@ -90,32 +90,32 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         View additionalSettings = getViewAdditionalSettings();
 
         //get GUI elements
-        switchPrefixEnabled = (Switch) additionalSettings.findViewById(R.id.switch_prefix_enabled);
-        linearLayoutPrefixSettings = (LinearLayout) additionalSettings.findViewById(R.id.linearLayout_prefix_settings);
-        checkBoxPrefixAToZUpperCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_A_to_Z);
-        checkBoxPrefixAToZLowerCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_a_to_z);
-        checkBoxPrefix0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_0_to_9);
-        checkBoxPrefixSpecialCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_special_characters);
-        seekBarPrefixLength = (SeekBar) additionalSettings.findViewById(R.id.seekBar_prefix_length);
-        textViewPrefixLength = (TextView) additionalSettings.findViewById(R.id.textView_prefix_length);
+        switchPrefixEnabled = additionalSettings.findViewById(R.id.switch_prefix_enabled);
+        linearLayoutPrefixSettings = additionalSettings.findViewById(R.id.linearLayout_prefix_settings);
+        checkBoxPrefixAToZUpperCase = additionalSettings.findViewById(R.id.checkBox_prefix_A_to_Z);
+        checkBoxPrefixAToZLowerCase = additionalSettings.findViewById(R.id.checkBox_prefix_a_to_z);
+        checkBoxPrefix0To9 = additionalSettings.findViewById(R.id.checkBox_prefix_0_to_9);
+        checkBoxPrefixSpecialCharacters = additionalSettings.findViewById(R.id.checkBox_prefix_special_characters);
+        seekBarPrefixLength = additionalSettings.findViewById(R.id.seekBar_prefix_length);
+        textViewPrefixLength = additionalSettings.findViewById(R.id.textView_prefix_length);
 
 
-        checkBoxAToZUpperCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_A_to_Z);
-        checkBoxAToZLowerCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_a_to_z);
-        checkBox0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_0_to_9);
-        checkBoxSpecialCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_special_characters);
+        checkBoxAToZUpperCase = additionalSettings.findViewById(R.id.checkBox_A_to_Z);
+        checkBoxAToZLowerCase = additionalSettings.findViewById(R.id.checkBox_a_to_z);
+        checkBox0To9 = additionalSettings.findViewById(R.id.checkBox_0_to_9);
+        checkBoxSpecialCharacters = additionalSettings.findViewById(R.id.checkBox_special_characters);
 
-        switchPostfixEnabled = (Switch) additionalSettings.findViewById(R.id.switch_postfix_enabled);
-        linearLayoutPostfixSettings = (LinearLayout) additionalSettings.findViewById(R.id.linearLayout_postfix_settings);
-        checkBoxPostfixAToZUpperCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_A_to_Z);
-        checkBoxPostfixAToZLowerCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_a_to_z);
-        checkBoxPostfix0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_0_to_9);
-        checkBoxPostfixSpecialCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_special_characters);
-        seekBarPostfixLength = (SeekBar) additionalSettings.findViewById(R.id.seekBar_postfix_length);
-        textViewPostfixLength = (TextView) additionalSettings.findViewById(R.id.textView_postfix_length);
+        switchPostfixEnabled = additionalSettings.findViewById(R.id.switch_postfix_enabled);
+        linearLayoutPostfixSettings = additionalSettings.findViewById(R.id.linearLayout_postfix_settings);
+        checkBoxPostfixAToZUpperCase = additionalSettings.findViewById(R.id.checkBox_postfix_A_to_Z);
+        checkBoxPostfixAToZLowerCase = additionalSettings.findViewById(R.id.checkBox_postfix_a_to_z);
+        checkBoxPostfix0To9 = additionalSettings.findViewById(R.id.checkBox_postfix_0_to_9);
+        checkBoxPostfixSpecialCharacters = additionalSettings.findViewById(R.id.checkBox_postfix_special_characters);
+        seekBarPostfixLength = additionalSettings.findViewById(R.id.seekBar_postfix_length);
+        textViewPostfixLength = additionalSettings.findViewById(R.id.textView_postfix_length);
 
-        checkBoxSpeakingPassword = (CheckBox) additionalSettings.findViewById(R.id.checkBox_speaking_password);
-        checkBoxAvoidSimilarCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_avoid_similar_characters);
+        checkBoxSpeakingPassword = additionalSettings.findViewById(R.id.checkBox_speaking_password);
+        checkBoxAvoidSimilarCharacters = additionalSettings.findViewById(R.id.checkBox_avoid_similar_characters);
 
         //initializes the Switches to turn on / off pre-/postfix settings
         initSwitches();
@@ -132,9 +132,11 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     public void onResume() {
         super.onResume();
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle(getString(R.string.activity_custom_password_generation_title));
+        if(getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(getString(R.string.activity_custom_password_generation_title));
+            }
         }
     }
 
@@ -497,5 +499,20 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         anim.setDuration(300);
 
         view.startAnimation(anim);
+    }
+
+    @Override
+    protected String getSettingsSharedPreferencesFileName() {
+        return getString(R.string.shared_pref_file_custom_password);
+    }
+
+    @Override
+    protected void saveAdditionalSettings() {
+
+    }
+
+    @Override
+    protected void loadAdditionalSettings() {
+
     }
 }

@@ -115,12 +115,12 @@ public class GeneratedPasswordsAdapter extends BaseAdapter {
         }
 
         //password text
-        TextView textViewPassword = (TextView) view.findViewById(R.id.textView_password);
+        TextView textViewPassword = view.findViewById(R.id.textView_password);
         textViewPassword.setText(password);
 
         //password rating
         final int rating = PasswordStrength.calculatePasswordStrengthRating(password);
-        RatingBarView ratingBarView = (RatingBarView) view.findViewById(R.id.ratingBarView_password_rating);
+        RatingBarView ratingBarView = view.findViewById(R.id.ratingBarView_password_rating);
         if(rating <= 2){
             ratingBarView.setRating(1);
         }
@@ -132,17 +132,19 @@ public class GeneratedPasswordsAdapter extends BaseAdapter {
         }
 
         //copy to clipboard
-        ImageButton imageButtonCopyToClipboard = (ImageButton) view.findViewById(R.id.imageButton_copy_to_clipboard);
+        ImageButton imageButtonCopyToClipboard = view.findViewById(R.id.imageButton_copy_to_clipboard);
         imageButtonCopyToClipboard.setOnClickListener(v -> {
             //put password in clipboard
             ClipData cd = ClipData.newPlainText(context.getString(R.string.clip_data_label_password), password);
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-            cm.setPrimaryClip(cd);
+            if(cm != null){
+                cm.setPrimaryClip(cd);
 
-            //inform user
-            Toast.makeText(context,
-                    context.getString(R.string.activity_preset_password_generation_password_copied_to_clipboard),
-                    Toast.LENGTH_SHORT).show();
+                //inform user
+                Toast.makeText(context,
+                        context.getString(R.string.activity_preset_password_generation_password_copied_to_clipboard),
+                        Toast.LENGTH_SHORT).show();
+            }
         });
 
         return view;

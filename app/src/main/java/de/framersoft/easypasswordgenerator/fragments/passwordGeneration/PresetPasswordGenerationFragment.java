@@ -74,9 +74,11 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
     public void onResume() {
         super.onResume();
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle(getString(R.string.activity_preset_password_generation_title));
+        if(getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(getString(R.string.activity_preset_password_generation_title));
+            }
         }
     }
 
@@ -85,7 +87,7 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
         super.onViewCreated(view, savedInstanceState);
 
         //get dynamic elements of the inflated configuration view
-        spinnerPasswordType = (Spinner) getViewAdditionalSettings().findViewById(R.id.spinner_password_type);
+        spinnerPasswordType = getViewAdditionalSettings().findViewById(R.id.spinner_password_type);
 
         //set the spinner listeners so a selection in the spinner will change the mode
         spinnerPasswordType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -164,5 +166,20 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
     @Override
     protected int getAdditionalSettingsLayoutResource() {
         return R.layout.additional_settings_preset_password_generation;
+    }
+
+    @Override
+    protected void saveAdditionalSettings() {
+
+    }
+
+    @Override
+    protected void loadAdditionalSettings() {
+
+    }
+
+    @Override
+    protected String getSettingsSharedPreferencesFileName() {
+        return getString(R.string.shared_pref_file_preset_password);
     }
 }

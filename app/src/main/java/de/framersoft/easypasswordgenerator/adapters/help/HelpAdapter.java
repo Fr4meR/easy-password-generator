@@ -80,7 +80,7 @@ public class HelpAdapter extends BaseAdapter implements PinnedSectionListView.Pi
     private final List<String> items = new ArrayList<>();
 
     /**
-     * a treeset containing the positions of the headers
+     * a tree-set containing the positions of the headers
      * int the list of items
      * @author Tobias Hess
      * @since 08.08.2017
@@ -88,7 +88,7 @@ public class HelpAdapter extends BaseAdapter implements PinnedSectionListView.Pi
     private final TreeSet<Integer> headerPositions = new TreeSet<>();
 
     /**
-     * treemap that maps the position of a help entry in the list of items
+     * tree-map that maps the position of a help entry in the list of items
      * to the HelpEntry object
      * @author Tobias Hess
      * @since 08.08.2017
@@ -183,7 +183,7 @@ public class HelpAdapter extends BaseAdapter implements PinnedSectionListView.Pi
         }
 
         if(convertView != null) {
-            TextView textViewText = (TextView) convertView.findViewById(android.R.id.text1);
+            TextView textViewText = convertView.findViewById(android.R.id.text1);
             textViewText.setText(text);
         }
 

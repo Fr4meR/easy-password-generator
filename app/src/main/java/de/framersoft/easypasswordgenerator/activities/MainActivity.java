@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         //initialize the drawerLayout and drawerToggle object
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout_main);
+        drawerLayout = findViewById(R.id.drawerLayout_main);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navi_drawer_open, R.string.navi_drawer_close){
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
         drawerLayout.addDrawerListener(drawerToggle);
 
         //set listeners to the main navigation view
-        navigationViewMain = (NavigationView) findViewById(R.id.navigationView_drawer_navigation);
+        navigationViewMain = findViewById(R.id.navigationView_drawer_navigation);
         navigationViewMain.setNavigationItemSelectedListener((MenuItem item) -> {
             drawerLayout.closeDrawers();
             switch(item.getItemId()){
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        navigationViewBottom = (NavigationView) findViewById(R.id.navigationView_drawer_navigation_bottom);
+        navigationViewBottom = findViewById(R.id.navigationView_drawer_navigation_bottom);
         navigationViewBottom.setNavigationItemSelectedListener((MenuItem item) -> {
             drawerLayout.closeDrawers();
             switch(item.getItemId()){
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        adViewBottomBanner = (AdView) findViewById(R.id.adView_bottom_banner);
+        adViewBottomBanner = findViewById(R.id.adView_bottom_banner);
         adViewBottomBanner.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity
         newAdMobSmartBanner.setLayoutParams(adViewBottomBanner.getLayoutParams());
 
         //remove old AdView from layout
-        LinearLayout linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayout_main);
+        LinearLayout linearLayoutMain = findViewById(R.id.linearLayout_main);
         linearLayoutMain.removeView(adViewBottomBanner);
 
         //add new adView into the layout
