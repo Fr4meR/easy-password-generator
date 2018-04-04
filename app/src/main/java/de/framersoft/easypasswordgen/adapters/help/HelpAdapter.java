@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.adapters.help;
+package de.framersoft.easypasswordgen.adapters.help;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import de.framersoft.easypasswordgenerator.R;
+import de.framersoft.easypasswordgen.R;
 import de.halfbit.pinnedsection.PinnedSectionListView;
 
 /**

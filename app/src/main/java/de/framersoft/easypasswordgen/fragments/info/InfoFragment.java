@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.fragments.info;
+package de.framersoft.easypasswordgen.fragments.info;
 
 
 import android.content.Intent;
@@ -35,9 +35,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import de.framersoft.common.constants.Version;
-import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.adapters.info.InfoAdapter;
-import de.framersoft.easypasswordgenerator.adapters.info.InfoEntry;
+import de.framersoft.easypasswordgen.R;
+import de.framersoft.easypasswordgen.adapters.info.InfoAdapter;
+import de.framersoft.easypasswordgen.adapters.info.InfoEntry;
 
 /**
  * This {@link Fragment} is used for the about use page.

@@ -6,7 +6,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
-        applicationId "de.framersoft.easypasswordgenerator"
+        applicationId "de.framersoft.easypasswordgen"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 11

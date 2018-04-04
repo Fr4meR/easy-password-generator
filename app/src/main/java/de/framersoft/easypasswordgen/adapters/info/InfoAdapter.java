@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.adapters.info;
+package de.framersoft.easypasswordgen.adapters.info;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -25,7 +25,7 @@ import android.widget.TextView;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.framersoft.easypasswordgenerator.R;
+import de.framersoft.easypasswordgen.R;
 
 /**
  * Adapter to populate a list for the info fragment

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.adapters.generatedPasswords;
+package de.framersoft.easypasswordgen.adapters.generatedPasswords;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -29,8 +29,8 @@ import android.widget.Toast;
 import java.util.List;
 
 import de.framersoft.common.password.strength.PasswordStrength;
-import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.view.ratingBar.RatingBarView;
+import de.framersoft.easypasswordgen.R;
+import de.framersoft.easypasswordgen.view.ratingBar.RatingBarView;
 
 /**
  * This Adapter is used to populate a ListView with items that represent

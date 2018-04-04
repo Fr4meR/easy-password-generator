@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.activities;
+package de.framersoft.easypasswordgen.activities;
 
 import android.content.res.Configuration;
 import android.support.annotation.Nullable;
@@ -37,13 +37,13 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.kobakei.ratethisapp.RateThisApp;
 
-import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
-import de.framersoft.easypasswordgenerator.fragments.info.InfoFragment;
-import de.framersoft.easypasswordgenerator.fragments.help.HelpEntryFragment;
-import de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment;
-import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.CustomPasswordGenerationFragment;
-import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.PresetPasswordGenerationFragment;
+import de.framersoft.easypasswordgen.R;
+import de.framersoft.easypasswordgen.adapters.help.HelpEntry;
+import de.framersoft.easypasswordgen.fragments.info.InfoFragment;
+import de.framersoft.easypasswordgen.fragments.help.HelpEntryFragment;
+import de.framersoft.easypasswordgen.fragments.help.HelpListFragment;
+import de.framersoft.easypasswordgen.fragments.passwordGeneration.CustomPasswordGenerationFragment;
+import de.framersoft.easypasswordgen.fragments.passwordGeneration.PresetPasswordGenerationFragment;
 
 /**
  * the main activity of the app. has an navigation drawer that will switch

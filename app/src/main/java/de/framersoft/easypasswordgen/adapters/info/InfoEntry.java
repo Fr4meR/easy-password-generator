@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.adapters.info;
+package de.framersoft.easypasswordgen.adapters.info;
 
 /**
  * This class represents an entry in the InfoFragment's List

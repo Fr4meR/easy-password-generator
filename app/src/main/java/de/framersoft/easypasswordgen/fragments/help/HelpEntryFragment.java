@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.fragments.help;
+package de.framersoft.easypasswordgen.fragments.help;
 
 
 import android.os.Build;
@@ -30,8 +30,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
+import de.framersoft.easypasswordgen.R;
+import de.framersoft.easypasswordgen.adapters.help.HelpEntry;
 
 /**
  * A {@link Fragment} that is used to display the

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
+package de.framersoft.easypasswordgen.fragments.passwordGeneration;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -37,7 +37,7 @@ import android.widget.Toast;
 import de.framersoft.common.constants.AlphabetConstants;
 import de.framersoft.common.password.alphabet.Alphabet;
 import de.framersoft.common.password.generator.PasswordGenerator;
-import de.framersoft.easypasswordgenerator.R;
+import de.framersoft.easypasswordgen.R;
 
 /**
  * This Fragment is used for custom password generation.

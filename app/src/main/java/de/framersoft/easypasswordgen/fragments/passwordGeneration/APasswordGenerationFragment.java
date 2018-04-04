@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
+package de.framersoft.easypasswordgen.fragments.passwordGeneration;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.framersoft.common.password.generator.PasswordGenerator;
-import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.adapters.generatedPasswords.GeneratedPasswordsAdapter;
+import de.framersoft.easypasswordgen.R;
+import de.framersoft.easypasswordgen.adapters.generatedPasswords.GeneratedPasswordsAdapter;
 
 /**
  * This {@link Fragment} is used for password generation fragments.

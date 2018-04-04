@@ -4,6 +4,6 @@
     android:id="@+id/listView_help"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment">
+    tools:context="de.framersoft.easypasswordgen.fragments.help.HelpListFragment">
 
 </de.halfbit.pinnedsection.PinnedSectionListView>

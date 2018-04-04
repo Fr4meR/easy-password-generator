@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
+package de.framersoft.easypasswordgen.fragments.passwordGeneration;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,7 +27,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import de.framersoft.common.password.generator.PasswordGenerator;
-import de.framersoft.easypasswordgenerator.R;
+import de.framersoft.easypasswordgen.R;
 
 /**
  * This Fragment is used for preset password generation.

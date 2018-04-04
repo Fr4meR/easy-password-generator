@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.fragments.help;
+package de.framersoft.easypasswordgen.fragments.help;
 
 
 import android.content.Context;
@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.framersoft.easypasswordgenerator.R;
-import de.framersoft.easypasswordgenerator.adapters.help.HelpAdapter;
-import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
+import de.framersoft.easypasswordgen.R;
+import de.framersoft.easypasswordgen.adapters.help.HelpAdapter;
+import de.framersoft.easypasswordgen.adapters.help.HelpEntry;
 
 /**
  * This {@link Fragment} is used to display the selection of available help

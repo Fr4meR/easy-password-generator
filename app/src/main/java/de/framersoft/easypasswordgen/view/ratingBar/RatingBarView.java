@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.framersoft.easypasswordgenerator.view.ratingBar;
+package de.framersoft.easypasswordgen.view.ratingBar;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -23,7 +23,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-import de.framersoft.easypasswordgenerator.R;
+import de.framersoft.easypasswordgen.R;
 
 /**
  * A {@link View} that is used to display a rating from 1 to 3
