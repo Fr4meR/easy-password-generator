@@ -274,16 +274,6 @@ public abstract class APasswordGenerationFragment extends Fragment {
         textViewNumberOfPasswords.setText(Integer.toString(getNumberOfPasswords()));
     }
 
-    /**
-     * resets the SeekBar for the number of passwords
-     * @author Tobias Hess
-     * @since 13.08.2017
-     */
-    protected void resetNumberOfPasswordsSeekBar(){
-        seekBarNumberOfPasswords.setProgress(DEFAULT_NUMBER_OF_PASSWORDS - 1);
-        refreshNumberOfPasswordsTextView();
-    }
-
     protected void setPasswordLengthVisibility(int visibility){
         textViewPasswordLengthTitle.setVisibility(visibility);
         seekBarPasswordLength.setVisibility(visibility);
