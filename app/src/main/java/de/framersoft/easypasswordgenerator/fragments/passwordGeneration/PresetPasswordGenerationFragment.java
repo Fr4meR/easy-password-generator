@@ -15,10 +15,13 @@
  */
 package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -74,9 +77,11 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
     public void onResume() {
         super.onResume();
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle(getString(R.string.activity_preset_password_generation_title));
+        if(getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(getString(R.string.activity_preset_password_generation_title));
+            }
         }
     }
 
@@ -85,7 +90,7 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
         super.onViewCreated(view, savedInstanceState);
 
         //get dynamic elements of the inflated configuration view
-        spinnerPasswordType = (Spinner) getViewAdditionalSettings().findViewById(R.id.spinner_password_type);
+        spinnerPasswordType = getViewAdditionalSettings().findViewById(R.id.spinner_password_type);
 
         //set the spinner listeners so a selection in the spinner will change the mode
         spinnerPasswordType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -99,9 +104,6 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
                 //not used
             }
         });
-
-        //starting mode: internet passwords
-        switchMode(PASSWORD_MODE_INTERNET_PASSWORDS);
     }
 
     /**
@@ -135,9 +137,7 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
                 throw new UnsupportedOperationException("unknown password mode");
         }
 
-        resetNumberOfPasswordsSeekBar();
-
-        //set currentmode to new one
+        //set current mode to new one
         currentMode = mode;
     }
 
@@ -164,5 +164,31 @@ public class PresetPasswordGenerationFragment extends APasswordGenerationFragmen
     @Override
     protected int getAdditionalSettingsLayoutResource() {
         return R.layout.additional_settings_preset_password_generation;
+    }
+
+    @Override
+    protected void saveAdditionalSettings() {
+        if(getContext() != null) {
+            SharedPreferences prefs = getContext().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
+            editor.putInt(getString(R.string.shared_pref_key_preset_passwords_mode), currentMode);
+            editor.apply();
+        }
+    }
+
+    @Override
+    protected void loadAdditionalSettings() {
+        if(getContext() != null){
+            SharedPreferences prefs = getContext().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
+
+            int mode = prefs.getInt(getString(R.string.shared_pref_key_preset_passwords_mode), PASSWORD_MODE_INTERNET_PASSWORDS);
+            switchMode(mode);
+        }
+    }
+
+    @Override
+    protected String getSettingsSharedPreferencesFileName() {
+        return getString(R.string.shared_pref_file_preset_password);
     }
 }

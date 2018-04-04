@@ -16,10 +16,13 @@
 package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -43,7 +46,7 @@ import de.framersoft.easypasswordgenerator.R;
  * @author Tobias Hess
  * @since 13.08.2017
  */
-public class CustomPasswordGeneration extends APasswordGenerationFragment {
+public class CustomPasswordGenerationFragment extends APasswordGenerationFragment {
 
     /*
      * GUI elements for the prefix settings
@@ -90,32 +93,32 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         View additionalSettings = getViewAdditionalSettings();
 
         //get GUI elements
-        switchPrefixEnabled = (Switch) additionalSettings.findViewById(R.id.switch_prefix_enabled);
-        linearLayoutPrefixSettings = (LinearLayout) additionalSettings.findViewById(R.id.linearLayout_prefix_settings);
-        checkBoxPrefixAToZUpperCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_A_to_Z);
-        checkBoxPrefixAToZLowerCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_a_to_z);
-        checkBoxPrefix0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_0_to_9);
-        checkBoxPrefixSpecialCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_prefix_special_characters);
-        seekBarPrefixLength = (SeekBar) additionalSettings.findViewById(R.id.seekBar_prefix_length);
-        textViewPrefixLength = (TextView) additionalSettings.findViewById(R.id.textView_prefix_length);
+        switchPrefixEnabled = additionalSettings.findViewById(R.id.switch_prefix_enabled);
+        linearLayoutPrefixSettings = additionalSettings.findViewById(R.id.linearLayout_prefix_settings);
+        checkBoxPrefixAToZUpperCase = additionalSettings.findViewById(R.id.checkBox_prefix_A_to_Z);
+        checkBoxPrefixAToZLowerCase = additionalSettings.findViewById(R.id.checkBox_prefix_a_to_z);
+        checkBoxPrefix0To9 = additionalSettings.findViewById(R.id.checkBox_prefix_0_to_9);
+        checkBoxPrefixSpecialCharacters = additionalSettings.findViewById(R.id.checkBox_prefix_special_characters);
+        seekBarPrefixLength = additionalSettings.findViewById(R.id.seekBar_prefix_length);
+        textViewPrefixLength = additionalSettings.findViewById(R.id.textView_prefix_length);
 
 
-        checkBoxAToZUpperCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_A_to_Z);
-        checkBoxAToZLowerCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_a_to_z);
-        checkBox0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_0_to_9);
-        checkBoxSpecialCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_special_characters);
+        checkBoxAToZUpperCase = additionalSettings.findViewById(R.id.checkBox_A_to_Z);
+        checkBoxAToZLowerCase = additionalSettings.findViewById(R.id.checkBox_a_to_z);
+        checkBox0To9 = additionalSettings.findViewById(R.id.checkBox_0_to_9);
+        checkBoxSpecialCharacters = additionalSettings.findViewById(R.id.checkBox_special_characters);
 
-        switchPostfixEnabled = (Switch) additionalSettings.findViewById(R.id.switch_postfix_enabled);
-        linearLayoutPostfixSettings = (LinearLayout) additionalSettings.findViewById(R.id.linearLayout_postfix_settings);
-        checkBoxPostfixAToZUpperCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_A_to_Z);
-        checkBoxPostfixAToZLowerCase = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_a_to_z);
-        checkBoxPostfix0To9 = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_0_to_9);
-        checkBoxPostfixSpecialCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_postfix_special_characters);
-        seekBarPostfixLength = (SeekBar) additionalSettings.findViewById(R.id.seekBar_postfix_length);
-        textViewPostfixLength = (TextView) additionalSettings.findViewById(R.id.textView_postfix_length);
+        switchPostfixEnabled = additionalSettings.findViewById(R.id.switch_postfix_enabled);
+        linearLayoutPostfixSettings = additionalSettings.findViewById(R.id.linearLayout_postfix_settings);
+        checkBoxPostfixAToZUpperCase = additionalSettings.findViewById(R.id.checkBox_postfix_A_to_Z);
+        checkBoxPostfixAToZLowerCase = additionalSettings.findViewById(R.id.checkBox_postfix_a_to_z);
+        checkBoxPostfix0To9 = additionalSettings.findViewById(R.id.checkBox_postfix_0_to_9);
+        checkBoxPostfixSpecialCharacters = additionalSettings.findViewById(R.id.checkBox_postfix_special_characters);
+        seekBarPostfixLength = additionalSettings.findViewById(R.id.seekBar_postfix_length);
+        textViewPostfixLength = additionalSettings.findViewById(R.id.textView_postfix_length);
 
-        checkBoxSpeakingPassword = (CheckBox) additionalSettings.findViewById(R.id.checkBox_speaking_password);
-        checkBoxAvoidSimilarCharacters = (CheckBox) additionalSettings.findViewById(R.id.checkBox_avoid_similar_characters);
+        checkBoxSpeakingPassword = additionalSettings.findViewById(R.id.checkBox_speaking_password);
+        checkBoxAvoidSimilarCharacters = additionalSettings.findViewById(R.id.checkBox_avoid_similar_characters);
 
         //initializes the Switches to turn on / off pre-/postfix settings
         initSwitches();
@@ -132,9 +135,11 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
     public void onResume() {
         super.onResume();
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle(getString(R.string.activity_custom_password_generation_title));
+        if(getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(getString(R.string.activity_custom_password_generation_title));
+            }
         }
     }
 
@@ -497,5 +502,100 @@ public class CustomPasswordGeneration extends APasswordGenerationFragment {
         anim.setDuration(300);
 
         view.startAnimation(anim);
+    }
+
+    @Override
+    protected String getSettingsSharedPreferencesFileName() {
+        return getString(R.string.shared_pref_file_custom_password);
+    }
+
+    @Override
+    protected void saveAdditionalSettings() {
+        if(getContext() != null) {
+            SharedPreferences prefs = getContext().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_a_to_z_uppercase), checkBoxAToZUpperCase.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_a_to_z_lowercase), checkBoxAToZLowerCase.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_0_to_9), checkBox0To9.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_special_characters), checkBoxSpecialCharacters.isChecked());
+
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix), switchPrefixEnabled.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix_a_to_z_uppercase), checkBoxPrefixAToZUpperCase.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix_a_to_z_lowercase), checkBoxPrefixAToZLowerCase.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix_0_to_9), checkBoxPrefix0To9.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix_special_characters), checkBoxPrefixSpecialCharacters.isChecked());
+            editor.putInt(getString(R.string.shared_pref_key_custom_passwords_prefix_length), getPrefixLength());
+
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix), switchPostfixEnabled.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix_a_to_z_uppercase), checkBoxPostfixAToZUpperCase.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix_a_to_z_lowercase), checkBoxPostfixAToZLowerCase.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix_0_to_9), checkBoxPostfix0To9.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix_special_characters), checkBoxPostfixSpecialCharacters.isChecked());
+            editor.putInt(getString(R.string.shared_pref_key_custom_passwords_postfix_length), getPostfixLength());
+
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_speaking_passwords), checkBoxSpeakingPassword.isChecked());
+            editor.putBoolean(getString(R.string.shared_pref_key_custom_passwords_avoid_similar_chars), checkBoxAvoidSimilarCharacters.isChecked());
+
+            editor.apply();
+        }
+    }
+
+    @Override
+    protected void loadAdditionalSettings() {
+        if(getContext() != null) {
+            SharedPreferences prefs = getContext().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
+
+            boolean upperCase = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_a_to_z_uppercase), true);
+            boolean lowerCase = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_a_to_z_lowercase), true);
+            boolean numbers = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_0_to_9), false);
+            boolean specialCharacters = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_special_characters), false);
+
+            boolean prefix = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix), false);
+            boolean prefixUpperCase = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix_a_to_z_uppercase), true);
+            boolean prefixLowerCase = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix_a_to_z_lowercase), false);
+            boolean prefixNumbers = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix_0_to_9), false);
+            boolean prefixSpecialCharacters = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_prefix_special_characters), false);
+            int prefixLength = prefs.getInt(getString(R.string.shared_pref_key_custom_passwords_prefix_length), 1);
+
+            boolean postfix = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix), false);
+            boolean postfixUpperCase = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix_a_to_z_uppercase), false);
+            boolean postfixLowerCase = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix_a_to_z_lowercase), false);
+            boolean postfixNumbers = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix_0_to_9), true);
+            boolean postfixSpecialCharacters = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_postfix_special_characters), false);
+            int postfixLength = prefs.getInt(getString(R.string.shared_pref_key_custom_passwords_postfix_length), 3);
+
+            boolean speakingPasswords = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_speaking_passwords), true);
+            boolean avoidSimilarCharacters = prefs.getBoolean(getString(R.string.shared_pref_key_custom_passwords_avoid_similar_chars), true);
+
+            //first check all, so we don't get problems with needing at least one checkbox to be
+            //checked
+            checkBoxAToZUpperCase.setChecked(true);
+            checkBoxAToZLowerCase.setChecked(true);
+            checkBox0To9.setChecked(true);
+            checkBoxSpecialCharacters.setChecked(true);
+
+            checkBoxAToZUpperCase.setChecked(upperCase);
+            checkBoxAToZLowerCase.setChecked(lowerCase);
+            checkBox0To9.setChecked(numbers);
+            checkBoxSpecialCharacters.setChecked(specialCharacters);
+
+            switchPrefixEnabled.setChecked(prefix);
+            checkBoxPrefixAToZUpperCase.setChecked(prefixUpperCase);
+            checkBoxPrefixAToZLowerCase.setChecked(prefixLowerCase);
+            checkBoxPrefix0To9.setChecked(prefixNumbers);
+            checkBoxPrefixSpecialCharacters.setChecked(prefixSpecialCharacters);
+            seekBarPrefixLength.setProgress(prefixLength);
+
+            switchPostfixEnabled.setChecked(postfix);
+            checkBoxPostfixAToZUpperCase.setChecked(postfixUpperCase);
+            checkBoxPostfixAToZLowerCase.setChecked(postfixLowerCase);
+            checkBoxPostfix0To9.setChecked(postfixNumbers);
+            checkBoxPostfixSpecialCharacters.setChecked(postfixSpecialCharacters);
+            seekBarPostfixLength.setProgress(postfixLength);
+
+            checkBoxSpeakingPassword.setChecked(speakingPasswords);
+            checkBoxAvoidSimilarCharacters.setChecked(avoidSimilarCharacters);
+        }
     }
 }

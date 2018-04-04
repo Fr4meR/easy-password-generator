@@ -42,7 +42,7 @@ import de.framersoft.easypasswordgenerator.adapters.help.HelpEntry;
 import de.framersoft.easypasswordgenerator.fragments.info.InfoFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpEntryFragment;
 import de.framersoft.easypasswordgenerator.fragments.help.HelpListFragment;
-import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.CustomPasswordGeneration;
+import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.CustomPasswordGenerationFragment;
 import de.framersoft.easypasswordgenerator.fragments.passwordGeneration.PresetPasswordGenerationFragment;
 
 /**
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         //initialize the drawerLayout and drawerToggle object
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout_main);
+        drawerLayout = findViewById(R.id.drawerLayout_main);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navi_drawer_open, R.string.navi_drawer_close){
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
         drawerLayout.addDrawerListener(drawerToggle);
 
         //set listeners to the main navigation view
-        navigationViewMain = (NavigationView) findViewById(R.id.navigationView_drawer_navigation);
+        navigationViewMain = findViewById(R.id.navigationView_drawer_navigation);
         navigationViewMain.setNavigationItemSelectedListener((MenuItem item) -> {
             drawerLayout.closeDrawers();
             switch(item.getItemId()){
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        navigationViewBottom = (NavigationView) findViewById(R.id.navigationView_drawer_navigation_bottom);
+        navigationViewBottom = findViewById(R.id.navigationView_drawer_navigation_bottom);
         navigationViewBottom.setNavigationItemSelectedListener((MenuItem item) -> {
             drawerLayout.closeDrawers();
             switch(item.getItemId()){
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        adViewBottomBanner = (AdView) findViewById(R.id.adView_bottom_banner);
+        adViewBottomBanner = findViewById(R.id.adView_bottom_banner);
         adViewBottomBanner.setAdListener(new AdListener(){
             @Override
             public void onAdLoaded() {
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
         if(f instanceof PresetPasswordGenerationFragment){
             selectNavigationDrawerItem(R.id.nav_preset_password_generation);
         }
-        else if(f instanceof CustomPasswordGeneration){
+        else if(f instanceof CustomPasswordGenerationFragment){
             selectNavigationDrawerItem(R.id.nav_custom_password_generation);
         }
         else if(f instanceof HelpListFragment || f instanceof HelpEntryFragment){
@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity
         newAdMobSmartBanner.setLayoutParams(adViewBottomBanner.getLayoutParams());
 
         //remove old AdView from layout
-        LinearLayout linearLayoutMain = (LinearLayout) findViewById(R.id.linearLayout_main);
+        LinearLayout linearLayoutMain = findViewById(R.id.linearLayout_main);
         linearLayoutMain.removeView(adViewBottomBanner);
 
         //add new adView into the layout
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity
      * @since 13.08.2017
      */
     private void openCustomPasswordGeneration(){
-        Fragment f = new CustomPasswordGeneration();
+        Fragment f = new CustomPasswordGenerationFragment();
         startFragment(f, true);
         selectNavigationDrawerItem(R.id.nav_custom_password_generation);
     }

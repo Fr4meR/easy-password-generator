@@ -83,11 +83,11 @@ public class InfoAdapter extends BaseAdapter {
         }
 
         //header
-        TextView mainText = (TextView) convertView.findViewById(R.id.textView_text);
+        TextView mainText = convertView.findViewById(R.id.textView_text);
         mainText.setText(item.getHeader());
 
         //content
-        TextView subText = (TextView) convertView.findViewById(R.id.textView_subtext);
+        TextView subText = convertView.findViewById(R.id.textView_subtext);
         subText.setText(item.getContent());
 
         return convertView;

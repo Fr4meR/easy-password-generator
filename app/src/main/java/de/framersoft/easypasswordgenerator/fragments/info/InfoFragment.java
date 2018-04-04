@@ -21,6 +21,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -55,14 +56,16 @@ public class InfoFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle(getString(R.string.fragment_title_info));
+        if(getActivity() != null) {
+            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(getString(R.string.fragment_title_info));
+            }
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
@@ -70,7 +73,7 @@ public class InfoFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         //build the data structure for the list view
@@ -78,14 +81,20 @@ public class InfoFragment extends Fragment {
         String buildNumber;
 
         try {
-            PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo(
-                    getActivity().getPackageName(), 0
-            );
-            versionName = packageInfo.versionName;
-            final String versionCode = Integer.toString(packageInfo.versionCode);
-            final String versionDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(packageInfo.lastUpdateTime));
+            if(getActivity() != null) {
+                PackageInfo packageInfo = getActivity().getPackageManager().getPackageInfo(
+                        getActivity().getPackageName(), 0
+                );
+                versionName = packageInfo.versionName;
+                final String versionCode = Integer.toString(packageInfo.versionCode);
+                final String versionDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date(packageInfo.lastUpdateTime));
 
-            buildNumber = versionCode + " (" + versionDate + ")";
+                buildNumber = versionCode + " (" + versionDate + ")";
+            }
+            else{
+                versionName = "---";
+                buildNumber = "---";
+            }
         } catch (PackageManager.NameNotFoundException e) {
             versionName = "---";
             buildNumber = "---";
@@ -99,7 +108,7 @@ public class InfoFragment extends Fragment {
         adapter.addTextEntry(getString(R.string.info_text_version_code), buildNumber);
         adapter.addTextEntry(getString(R.string.info_text_version_common), Version.VERSION_STRING);
 
-        ListView listViewInfo = (ListView) view.findViewById(R.id.listView_info);
+        ListView listViewInfo = view.findViewById(R.id.listView_info);
         listViewInfo.setAdapter(adapter);
 
         //set click listener

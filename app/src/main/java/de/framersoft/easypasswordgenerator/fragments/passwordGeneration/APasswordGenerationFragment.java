@@ -16,9 +16,13 @@
 package de.framersoft.easypasswordgenerator.fragments.passwordGeneration;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,11 +134,13 @@ public abstract class APasswordGenerationFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //initialize the adapter for the password ListView
-        generatedPasswordsAdapter = new GeneratedPasswordsAdapter(getActivity(), new ArrayList<>());
+        if(getActivity() != null) {
+            generatedPasswordsAdapter = new GeneratedPasswordsAdapter(getActivity(), new ArrayList<>());
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_preset_password_generation, container, false);
@@ -145,20 +151,20 @@ public abstract class APasswordGenerationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //create the ListView with the Configurations as header
-        ListView listViewGeneratedPasswords = (ListView) view.findViewById(R.id.listView_generated_passwords);
+        ListView listViewGeneratedPasswords = view.findViewById(R.id.listView_generated_passwords);
         View presetPasswordConfiguration = getActivity().getLayoutInflater().inflate(R.layout.list_header_preset_password_configuration,
                 listViewGeneratedPasswords, false);
         listViewGeneratedPasswords.addHeaderView(presetPasswordConfiguration);
         listViewGeneratedPasswords.setAdapter(generatedPasswordsAdapter);
 
         //get GUI elements
-        ViewStub viewStubAdditionalSettings = (ViewStub) presetPasswordConfiguration.findViewById(R.id.viewStub_additional_settings);
-        textViewPasswordLengthTitle = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_password_length_title);
-        seekBarPasswordLength = (SeekBar) presetPasswordConfiguration.findViewById(R.id.seekBar_password_length);
-        textViewPasswordLength = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_password_length);
-        seekBarNumberOfPasswords = (SeekBar) presetPasswordConfiguration.findViewById(R.id.seekBar_number_of_passwords);
-        textViewNumberOfPasswords = (TextView) presetPasswordConfiguration.findViewById(R.id.textView_number_of_passwords);
-        Button buttonGenerate = (Button) presetPasswordConfiguration.findViewById(R.id.button_generate_password);
+        ViewStub viewStubAdditionalSettings = presetPasswordConfiguration.findViewById(R.id.viewStub_additional_settings);
+        textViewPasswordLengthTitle = presetPasswordConfiguration.findViewById(R.id.textView_password_length_title);
+        seekBarPasswordLength = presetPasswordConfiguration.findViewById(R.id.seekBar_password_length);
+        textViewPasswordLength = presetPasswordConfiguration.findViewById(R.id.textView_password_length);
+        seekBarNumberOfPasswords = presetPasswordConfiguration.findViewById(R.id.seekBar_number_of_passwords);
+        textViewNumberOfPasswords = presetPasswordConfiguration.findViewById(R.id.textView_number_of_passwords);
+        Button buttonGenerate = presetPasswordConfiguration.findViewById(R.id.button_generate_password);
 
         //inflate the view stub with the additional settings
         viewStubAdditionalSettings.setLayoutResource(getAdditionalSettingsLayoutResource());
@@ -206,9 +212,22 @@ public abstract class APasswordGenerationFragment extends Fragment {
             generatedPasswordsAdapter.setGeneratedPasswords(generatePasswords());
             listViewGeneratedPasswords.smoothScrollToPositionFromTop(1, 16, 350);
         });
+    }
 
-        resetNumberOfPasswordsSeekBar();
-        refreshPasswordLengthTextView();
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        loadSettings();
+        loadAdditionalSettings();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        saveSettings();
+        saveAdditionalSettings();
     }
 
     /**
@@ -279,9 +298,15 @@ public abstract class APasswordGenerationFragment extends Fragment {
      *      the minimal password length to set
      */
     protected void setMinPasswordLength(int minPasswordLength){
+        int newProgress = seekBarPasswordLength.getProgress() + this.minPasswordLength - minPasswordLength;
+        if(newProgress < 0){
+            newProgress = 0;
+        }
         this.minPasswordLength = minPasswordLength;
+
         seekBarPasswordLength.setMax(MAX_PASSWORD_LENGTH - minPasswordLength);
-        seekBarPasswordLength.setProgress(DEFAULT_PASSWORD_LENGTH - minPasswordLength);
+        seekBarPasswordLength.setProgress(newProgress);
+
         refreshPasswordLengthTextView();
     }
 
@@ -332,4 +357,60 @@ public abstract class APasswordGenerationFragment extends Fragment {
     protected View getViewAdditionalSettings(){
         return viewAdditionalSettings;
     }
+
+    /**
+     * Saves the selected settings in the {@link android.content.SharedPreferences}
+     * @author Tobias Hess
+     * @since 06.02.2018
+     */
+    private void saveSettings(){
+        if(getContext() != null) {
+            SharedPreferences prefs = getContext().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+
+            editor.putInt(getString(R.string.shared_pref_key_general_password_length), getPasswordLength());
+            editor.putInt(getString(R.string.shared_pref_key_general_number_of_passwords), getNumberOfPasswords());
+
+            editor.apply();
+        }
+    }
+
+    /**
+     * Loads the previously saved settings from the {@link android.content.SharedPreferences}
+     * @author Tobias Hess
+     * @since 06.02.2018
+     */
+    private void loadSettings(){
+        if(getContext() != null) {
+            SharedPreferences prefs = getContext().getSharedPreferences(getSettingsSharedPreferencesFileName(), Context.MODE_PRIVATE);
+
+            int passwordLength = prefs.getInt(getString(R.string.shared_pref_key_general_password_length), DEFAULT_PASSWORD_LENGTH);
+            seekBarPasswordLength.setProgress(passwordLength - minPasswordLength);
+
+            int numberOfPasswords = prefs.getInt(getString(R.string.shared_pref_key_general_number_of_passwords), DEFAULT_NUMBER_OF_PASSWORDS);
+            seekBarNumberOfPasswords.setProgress(numberOfPasswords - 1);
+        }
+    }
+
+    /**
+     * Saves the selected additional settings in the {@link android.content.SharedPreferences}
+     * @author Tobias Hess
+     * @since 06.02.2018
+     */
+    protected abstract void saveAdditionalSettings();
+
+    /**
+     * Loads the previously saved additional settings from the {@link android.content.SharedPreferences}
+     * @author Tobias Hess
+     * @since 06.02.2018
+     */
+    protected abstract void loadAdditionalSettings();
+
+    /**
+     * @author Tobias Hess
+     * @since 06.02.2018
+     * @return
+     *      the file name of the shared preferences for the fragments settings
+     */
+    protected abstract String getSettingsSharedPreferencesFileName();
 }

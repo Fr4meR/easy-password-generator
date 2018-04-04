@@ -221,5 +221,34 @@
     <string name="rate_dialog_cancel">Later</string>
     <string name="rate_dialog_no">Never</string>
 
+    <!-- shared pref file names -->
+    <string name="shared_pref_file_custom_password" translatable="false">de.framersoft.easypasswordgenerator.custom_password_generation</string>
+    <string name="shared_pref_file_preset_password" translatable="false">de.framersoft.easypasswordgenerator.preset_password_generation</string>
+
+    <!-- shared pref file keys -->
+    <string name="shared_pref_key_general_password_length" translatable="false">password_length</string>
+    <string name="shared_pref_key_general_number_of_passwords" translatable="false">number_of_passwords</string>
+
+    <string name="shared_pref_key_preset_passwords_mode" translatable="false">preset_mode</string>
+
+    <string name="shared_pref_key_custom_passwords_a_to_z_uppercase" translatable="false">a_to_z_uppercase</string>
+    <string name="shared_pref_key_custom_passwords_a_to_z_lowercase" translatable="false">a_to_z_lowercase</string>
+    <string name="shared_pref_key_custom_passwords_0_to_9" translatable="false">0_to_9</string>
+    <string name="shared_pref_key_custom_passwords_special_characters" translatable="false">special_characters</string>
+    <string name="shared_pref_key_custom_passwords_prefix" translatable="false">toggle_prefix</string>
+    <string name="shared_pref_key_custom_passwords_prefix_a_to_z_uppercase" translatable="false">prefix_a_to_z_uppercase</string>
+    <string name="shared_pref_key_custom_passwords_prefix_a_to_z_lowercase" translatable="false">prefix_a_to_z_lowercase</string>
+    <string name="shared_pref_key_custom_passwords_prefix_0_to_9" translatable="false">prefix_0_to_9</string>
+    <string name="shared_pref_key_custom_passwords_prefix_special_characters" translatable="false">prefix_special_characters</string>
+    <string name="shared_pref_key_custom_passwords_prefix_length" translatable="false">prefix_length</string>
+    <string name="shared_pref_key_custom_passwords_postfix" translatable="false">toggle_postfix</string>
+    <string name="shared_pref_key_custom_passwords_postfix_a_to_z_uppercase" translatable="false">postfix_a_to_z_uppercase</string>
+    <string name="shared_pref_key_custom_passwords_postfix_a_to_z_lowercase" translatable="false">postfix_a_to_z_lowercase</string>
+    <string name="shared_pref_key_custom_passwords_postfix_0_to_9" translatable="false">postfix_0_to_9</string>
+    <string name="shared_pref_key_custom_passwords_postfix_special_characters" translatable="false">postfix_special_characters</string>
+    <string name="shared_pref_key_custom_passwords_postfix_length" translatable="false">postfix_length</string>
+    <string name="shared_pref_key_custom_passwords_speaking_passwords" translatable="false">speaking_password</string>
+    <string name="shared_pref_key_custom_passwords_avoid_similar_chars" translatable="false">avoid_similar_characters</string>
+
 </resources>
 

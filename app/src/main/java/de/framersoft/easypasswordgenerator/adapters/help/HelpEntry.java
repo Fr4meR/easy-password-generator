@@ -32,7 +32,7 @@ public class HelpEntry {
     public final static String BUNDLE_KEY_TITLE = "help_entry_title";
 
     /**
-     * bundly key: content
+     * bundle key: content
      * @author Tobias Hess
      * @since 08.08.2017
      */
@@ -56,14 +56,14 @@ public class HelpEntry {
      * constructor
      * @author Tobias Hess
      * @since 08.08.2017
-     * @param titleRessource
-     *      the ressource id of the title
-     * @param contentRessource
-     *      the ressource id of the content
+     * @param titleResource
+     *      the resource id of the title
+     * @param contentResource
+     *      the resource id of the content
      */
-    public HelpEntry(int titleRessource, int contentRessource){
-        setTitle(titleRessource);
-        setContent(contentRessource);
+    public HelpEntry(int titleResource, int contentResource){
+        setTitle(titleResource);
+        setContent(contentResource);
     }
 
     /**
